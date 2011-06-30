@@ -88,12 +88,12 @@ public class Decider extends Activity {
         mDialog.setContentView(R.layout.about_dialog);
         mDialog.setTitle("About...");
 
-        TextView about_name = (TextView) mDialog.findViewById(R.id.about_name);
-        about_name.setText(R.string.about_name);
-        TextView about_mail = (TextView) mDialog.findViewById(R.id.about_mail);
-        about_mail.setText(R.string.about_mail);
-        ImageView image = (ImageView) mDialog.findViewById(R.id.about_image);
-        image.setImageResource(R.drawable.icon);
+        TextView aboutName = (TextView) mDialog.findViewById(R.id.about_name);
+        aboutName.setText(R.string.about_name);
+        TextView aboutMail = (TextView) mDialog.findViewById(R.id.about_mail);
+        aboutMail.setText(R.string.about_mail);
+        ImageView aboutImage = (ImageView) mDialog.findViewById(R.id.about_image);
+        aboutImage.setImageResource(R.drawable.icon);
 
         return mDialog;
     }
@@ -102,11 +102,14 @@ public class Decider extends Activity {
         Dialog mDialog = new Dialog(this);
 
         mDialog.setContentView(R.layout.list_item);
-        TextView item = (TextView) findViewById(R.id.item);
+        TextView item = (TextView) mDialog.findViewById(R.id.item);
         Button decideButton = (Button) findViewById(R.id.decidebtn);
         TextView result = (TextView) decideButton.getTag();
+        decideButton.setTag(null);
 
+        mDialog.setTitle(R.string.result_title);
         item.setText(result.getText());
+
         return mDialog;
     }
 }
