@@ -6,6 +6,9 @@
     <string name="remove_btn">Decider</string>
     <string name="decide_btn">Decider</string>
 
+    <string name="about_name">Jan Seeger</string>
+    <string name="about_mail">jan@alphadev.net</string>
+
     <string name="about_btn">About</string>
     <string name="quit_btn">Quit</string>
 </resources>

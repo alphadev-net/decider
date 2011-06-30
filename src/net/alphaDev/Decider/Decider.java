@@ -1,15 +1,19 @@
 package net.alphaDev.Decider;
 
+import android.app.Dialog;
 import net.alphaDev.Decider.Actions.addAction;
 import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class Decider extends Activity {
     @Override
@@ -57,6 +61,32 @@ public class Decider extends Activity {
     private ListAdapter adapter;
 
     private void showAbout() {
-        
+        showDialog(DIALOG_ABOUT_ID);
     }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog;
+
+        switch (id)  {
+            case DIALOG_ABOUT_ID:
+                dialog = new Dialog(this);
+
+                dialog.setContentView(R.layout.about_dialog);
+                dialog.setTitle("About...");
+
+                TextView about_name = (TextView) dialog.findViewById(R.id.about_name);
+                about_name.setText(R.string.about_name);
+                TextView about_mail = (TextView) dialog.findViewById(R.id.about_mail);
+                about_mail.setText(R.string.about_mail);
+                ImageView image = (ImageView) dialog.findViewById(R.id.about_image);
+                image.setImageResource(R.drawable.icon);
+                break;
+            default:
+                dialog = super.onCreateDialog(id);
+        }
+        return dialog;
+    }
+
+    static final int DIALOG_ABOUT_ID = 0;
 }
