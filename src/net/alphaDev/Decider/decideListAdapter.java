@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
@@ -12,13 +11,13 @@ import java.util.ArrayList;
  * @author jan
  */
 public class decideListAdapter extends BaseAdapter {
-    private ArrayList<listItem> dataList;
+    private ArrayList<View> dataList;
     private Context context;
 
     public decideListAdapter(Context context) {
         super();
         this.context = context;
-        dataList = new ArrayList<listItem>();
+        dataList = new ArrayList<View>();
     }
 
     public int getCount() {
@@ -34,16 +33,16 @@ public class decideListAdapter extends BaseAdapter {
     }
 
     public View getView(int i, View view, ViewGroup vg) {
-        if(view == null) {
-            TextView temp = new TextView(context);
-            temp.setText(dataList.get(i).toString());
-            view = temp;
-        }
-        return view;
+        return (View) getItem(i);
     }
 
-    void add(listItem listItem) {
+    public void add(View listItem) {
         dataList.add(listItem);
+        notifyDataSetChanged();
+    }
+
+    public void remove(View listItem) {
+        dataList.remove(listItem);
         notifyDataSetChanged();
     }
 }
