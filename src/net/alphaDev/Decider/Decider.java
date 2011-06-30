@@ -4,7 +4,6 @@ import android.app.Dialog;
 import net.alphaDev.Decider.Actions.addAction;
 import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;

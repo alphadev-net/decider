@@ -6,39 +6,39 @@ android:layout_height="fill_parent"
 android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
-<LinearLayout
+    <LinearLayout
 android:id="@+id/widget31"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 >
-<EditText
+        <EditText
 android:id="@+id/addlabel"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:textSize="18sp"
 android:layout_weight="1"
 >
-</EditText>
-<Button
+        </EditText>
+        <Button
 android:id="@+id/addbtn"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:text="@string/add_btn"
 >
-</Button>
-</LinearLayout>
-<Button
+        </Button>
+    </LinearLayout>
+    <Button
 android:id="@+id/decidebtn"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:text="@string/decide_btn"
 >
-</Button>
-<ListView
+    </Button>
+    <ListView
 android:id="@+id/list"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:layout_weight="1"
 >
-</ListView>
+    </ListView>
 </LinearLayout>

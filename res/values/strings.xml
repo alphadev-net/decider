@@ -2,9 +2,8 @@
 <resources>
     <string name="app_name">Decider</string>
 
-    <string name="add_btn">Decider</string>
-    <string name="remove_btn">Decider</string>
-    <string name="decide_btn">Decider</string>
+    <string name="add_btn">add</string>
+    <string name="decide_btn">decide</string>
 
     <string name="about_name">Jan Seeger</string>
     <string name="about_mail">jan@alphadev.net</string>
