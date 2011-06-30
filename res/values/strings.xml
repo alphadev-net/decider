@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Decider</string>
+
+    <string name="add_btn">Decider</string>
+    <string name="remove_btn">Decider</string>
+    <string name="decide_btn">Decider</string>
+
+    <string name="about_btn">About</string>
+    <string name="quit_btn">Quit</string>
 </resources>

@@ -23,7 +23,7 @@ android:layout_weight="1"
 android:id="@+id/addbtn"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text=" + "
+android:text="@string/add_btn"
 >
 </Button>
 </LinearLayout>
@@ -31,7 +31,7 @@ android:text=" + "
 android:id="@+id/decidebtn"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
-android:text="decide"
+android:text="@string/decide_btn"
 >
 </Button>
 <ListView
