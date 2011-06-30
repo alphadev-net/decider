@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import net.alphaDev.Decider.Decider;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Utility;
 import net.alphaDev.Decider.decideListAdapter;
 import net.alphaDev.Decider.listItemFactory;
 
@@ -21,7 +21,7 @@ public class addAction implements OnClickListener {
     }
 
     public void onClick(View view) {
-        decideListAdapter adapter = (decideListAdapter) ((Decider)caller).getListAdapter();
+        decideListAdapter adapter = (decideListAdapter) Utility.extractAdapter(caller);
         TextView text = (TextView) caller.findViewById(R.id.addlabel);
         String label = text.getText().toString();
         text.setText(null);
