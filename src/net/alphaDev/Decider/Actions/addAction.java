@@ -1,9 +1,13 @@
-package net.alphaDev.Decider;
+package net.alphaDev.Decider.Actions;
 
 import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import net.alphaDev.Decider.Decider;
+import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.decideListAdapter;
+import net.alphaDev.Decider.listItemFactory;
 
 /**
  *
@@ -12,7 +16,7 @@ import android.widget.TextView;
 public class addAction implements OnClickListener {
     Activity caller;
 
-    addAction(Activity caller) {
+    public addAction(Activity caller) {
         this.caller = caller;
     }
 
@@ -22,6 +26,6 @@ public class addAction implements OnClickListener {
         String label = text.getText().toString();
         text.setText(null);
         
-        adapter.add(new listItem(caller, label));
+        adapter.add(listItemFactory.create(caller, label));
     }
 }

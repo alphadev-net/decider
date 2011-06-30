@@ -1,5 +1,7 @@
 package net.alphaDev.Decider;
 
+import net.alphaDev.Decider.Actions.addAction;
+import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;

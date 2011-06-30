@@ -1,4 +1,4 @@
-package net.alphaDev.Decider;
+package net.alphaDev.Decider.Actions;
 
 import android.view.View;
 import android.view.View.OnClickListener;
