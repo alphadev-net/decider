@@ -24,8 +24,10 @@ public class addAction implements OnClickListener {
         decideListAdapter adapter = (decideListAdapter) Utility.extractAdapter(caller);
         TextView text = (TextView) caller.findViewById(R.id.addlabel);
         String label = text.getText().toString();
-        text.setText(null);
-        
-        adapter.add(listItemFactory.create(caller, label));
+
+        if(label.length() > 0) {
+            text.setText(null);
+            adapter.add(listItemFactory.create(caller, label));
+        }
     }
 }
