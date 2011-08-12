@@ -10,14 +10,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.WheelViewAdapter;
 
 public class Decider extends Activity {
+
     public static final int DIALOG_ABOUT_ID = 0;
-    public static final int DIALOG_RESULT_ID = 1;
-    private ListAdapter adapter;
+    private Button decideButton;
+    private Button addButton;
+    private WheelView wheel;
+    private static WheelViewAdapter adapter;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -32,17 +35,17 @@ public class Decider extends Activity {
             adapter = new decideListAdapter(getApplicationContext());
         }
 
-        ListView mListView = (ListView) findViewById(R.id.list);
-        Button addButton = (Button) findViewById(R.id.addbtn);
-        Button decideButton = (Button) findViewById(R.id.decidebtn);
+        wheel = (WheelView) findViewById(R.id.list);
+        addButton = (Button) findViewById(R.id.addbtn);
+        decideButton = (Button) findViewById(R.id.decidebtn);
 
-        mListView.setAdapter(getListAdapter());
+        wheel.setViewAdapter(adapter);
         addButton.setOnClickListener(new addAction(this));
         decideButton.setOnClickListener(new decideAction(this));
     }
 
-    public ListAdapter getListAdapter() {
-        return adapter;
+    public WheelView getWheel() {
+        return wheel;
     }
 
     @Override
@@ -71,10 +74,7 @@ public class Decider extends Activity {
 
         switch (id) {
             case DIALOG_ABOUT_ID:
-                mDialog = getAboutDialog();
-                break;
-            case DIALOG_RESULT_ID:
-                mDialog = getResultDialog();
+                mDialog = createAboutDialog();
                 break;
             default:
                 mDialog = super.onCreateDialog(id);
@@ -82,34 +82,30 @@ public class Decider extends Activity {
         return mDialog;
     }
 
-    private Dialog getAboutDialog() {
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        switch (id) {
+            case DIALOG_ABOUT_ID:
+                prepareAboutDialog(dialog);
+                break;
+            default:
+                super.onPrepareDialog(id, dialog);
+        }
+    }
+
+    private Dialog createAboutDialog() {
         Dialog mDialog = new Dialog(this);
-
         mDialog.setContentView(R.layout.about_dialog);
-        mDialog.setTitle("About...");
+        mDialog.setTitle(R.string.about_title);
+        return mDialog;
+    }
 
+    private void prepareAboutDialog(Dialog mDialog) {
         TextView aboutName = (TextView) mDialog.findViewById(R.id.about_name);
         aboutName.setText(R.string.about_name);
         TextView aboutMail = (TextView) mDialog.findViewById(R.id.about_mail);
         aboutMail.setText(R.string.about_mail);
         ImageView aboutImage = (ImageView) mDialog.findViewById(R.id.about_image);
         aboutImage.setImageResource(R.drawable.icon);
-
-        return mDialog;
-    }
-
-    private Dialog getResultDialog() {
-        Dialog mDialog = new Dialog(this);
-
-        mDialog.setContentView(R.layout.list_item);
-        TextView item = (TextView) mDialog.findViewById(R.id.item);
-        Button decideButton = (Button) findViewById(R.id.decidebtn);
-        TextView result = (TextView) decideButton.getTag();
-        decideButton.setTag(null);
-
-        mDialog.setTitle(R.string.result_title);
-        item.setText(result.getText());
-
-        return mDialog;
     }
 }

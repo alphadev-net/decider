@@ -7,14 +7,13 @@ import android.widget.TextView;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.Utility;
 import net.alphaDev.Decider.decideListAdapter;
-import net.alphaDev.Decider.listItemFactory;
 
 /**
  *
  * @author jan
  */
 public class addAction implements OnClickListener {
-    Activity caller;
+    private final Activity caller;
 
     public addAction(Activity caller) {
         this.caller = caller;
@@ -27,7 +26,7 @@ public class addAction implements OnClickListener {
 
         if(label.length() > 0) {
             text.setText(null);
-            adapter.add(listItemFactory.create(caller, label));
+            adapter.add(label);
         }
     }
 }
