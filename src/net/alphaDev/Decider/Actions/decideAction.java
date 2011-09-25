@@ -13,7 +13,7 @@ import net.alphaDev.Decider.decideListAdapter;
 
 /**
  *
- * @author jan
+ * @author Jan Seeger <jan@alphadev.net>
  */
 public class decideAction implements OnClickListener {
     private final Activity caller;

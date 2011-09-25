@@ -2,28 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_height="wrap_content"
               android:padding="10dp"
               >
     <ImageView android:id="@+id/about_image"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginRight="10dp"
+               android:src="@+drawable/icon"
                />
     <LinearLayout
               android:orientation="vertical"
               android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
+              android:layout_height="wrap_content"
               >
         <TextView android:id="@+id/about_name"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:textColor="#FFF"
+              android:text="@+string/about_name"
               />
         <TextView android:id="@+id/about_mail"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:textColor="#FFF"
+              android:text="@+string/about_mail"
+              android:clickable="true"
+              android:onClick="aboutHandler"
+              />
+        <TextView android:id="@+id/about_http"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:textColor="#FFF"
+              android:text="@+string/about_http"
+              android:clickable="true"
+              android:onClick="aboutHandler"
               />
     </LinearLayout>
 </LinearLayout>

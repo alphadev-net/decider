@@ -7,7 +7,7 @@ import kankan.wheel.widget.WheelView;
 
 /**
  *
- * @author jan
+ * @author Jan Seeger <jan@alphadev.net>
  */
 public class Utility {
     public static WheelViewAdapter extractAdapter(Activity activity) {
