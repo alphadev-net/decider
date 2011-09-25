@@ -1,48 +1,37 @@
 package net.alphaDev.Decider;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import java.util.ArrayList;
+import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
 
 /**
  *
  * @author jan
  */
-public class decideListAdapter extends BaseAdapter {
-    private ArrayList<View> dataList;
-    private Context context;
+public class decideListAdapter extends AbstractWheelTextAdapter {
+    private ArrayList<CharSequence> dataList;
 
     public decideListAdapter(Context context) {
-        super();
-        this.context = context;
-        dataList = new ArrayList<View>();
+        super(context);
+        dataList = new ArrayList<CharSequence>();
     }
 
-    public int getCount() {
+    public int getItemsCount() {
         return dataList.size();
     }
 
-    public Object getItem(int i) {
+    @Override
+    public CharSequence getItemText(int i) {
         return dataList.get(i);
     }
 
-    public long getItemId(int i) {
-        return i;
-    }
-
-    public View getView(int i, View view, ViewGroup vg) {
-        return (View) getItem(i);
-    }
-
-    public void add(View listItem) {
+    public void add(CharSequence listItem) {
         dataList.add(listItem);
-        notifyDataSetChanged();
+        notifyDataChangedEvent();
     }
 
-    public void remove(View listItem) {
+    public void remove(CharSequence listItem) {
         dataList.remove(listItem);
-        notifyDataSetChanged();
+        notifyDataChangedEvent();
     }
 }

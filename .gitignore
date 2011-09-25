@@ -1,5 +1,8 @@
 /bin/
 /gen/
-/nbandroid/
+/nbandroid/ö
 /libs/wheel/gen/
 /libs/wheel/bin/
+*.bak
+.DS_Store
+/libs/wheel/nbandroid/

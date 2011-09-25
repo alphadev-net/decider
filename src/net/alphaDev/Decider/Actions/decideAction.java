@@ -1,12 +1,13 @@
 package net.alphaDev.Decider.Actions;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import net.alphaDev.Decider.Decider;
-import net.alphaDev.Decider.R;
+import android.view.inputmethod.InputMethodManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import kankan.wheel.widget.WheelView;
 import net.alphaDev.Decider.Util.Utility;
 import net.alphaDev.Decider.decideListAdapter;
 
@@ -15,7 +16,7 @@ import net.alphaDev.Decider.decideListAdapter;
  * @author jan
  */
 public class decideAction implements OnClickListener {
-    Activity caller;
+    private final Activity caller;
 
     public decideAction(Activity caller) {
         this.caller = caller;
@@ -23,10 +24,21 @@ public class decideAction implements OnClickListener {
 
     public void onClick(View view) {
         decideListAdapter adapter = (decideListAdapter) Utility.extractAdapter(caller);
-        int random = (int)Math.floor(Math.random()*adapter.getCount());
+        Logger logger = Logger.getLogger("Decider");
 
-        TextView label = (TextView) ((LinearLayout) adapter.getItem(random)).findViewById(R.id.item);
-        view.setTag(label);
-        caller.showDialog(Decider.DIALOG_RESULT_ID);
+        int random = pickNumberLowerThan(adapter.getItemsCount());
+        logger.log(Level.INFO, "item: {0}", random);
+
+        InputMethodManager mgr = (InputMethodManager) 
+                caller.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        WheelView wheel = Utility.extractWheel(caller);
+        //wheel.setCyclic(true);
+        wheel.setCurrentItem(random, true);
+        //wheel.setCyclic(false);
+    }
+
+    private int pickNumberLowerThan(int thisNumber) {
+        return (int)(Math.floor(Math.random() * thisNumber));
     }
 }
