@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
+import net.alphaDev.Decider.Actions.loadListAction;
 import net.alphaDev.Decider.Actions.saveListAction;
 import net.alphaDev.Decider.Storage.deciderStorage;
 import net.alphaDev.Decider.Storage.deciderStorageFactory;
@@ -164,9 +164,7 @@ public class Decider extends Activity {
     }
 
     private Dialog createSaveDialog() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View mDialog = inflater.inflate(R.layout.save_dialog,
-                               (ViewGroup) findViewById(R.id.save_dialog));
+        View mDialog = createDialog(R.layout.save_dialog);
         EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
 
         return new AlertDialog.Builder(this)
@@ -174,6 +172,20 @@ public class Decider extends Activity {
         .setMessage(R.string.list_title_dialog_message)
         .setPositiveButton(R.string.save_btn, new saveListAction(this, input))
         .create();
+    }
+
+    private Dialog createLoadDialog() {
+        View mDialog = createDialog(R.layout.load_dialog);
+
+        return new AlertDialog.Builder(this)
+        .setView(mDialog)
+        .setMessage(R.string.load_title_dialog_message)
+        .create();
+    }
+
+    private View createDialog(int dialog) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        return inflater.inflate(dialog, null);
     }
 
     private void prepareSaveDialog(Dialog mDialog) {
@@ -186,16 +198,5 @@ public class Decider extends Activity {
         ListAdapter listAdapter = getDatabase().getLists();
         ListView list = (ListView) dialog.findViewById(R.id.load_list);
         list.setAdapter(listAdapter);
-    }
-
-    private Dialog createLoadDialog() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View mDialog = inflater.inflate(R.layout.load_dialog,
-                               (ViewGroup) findViewById(R.id.load_dialog));
-        
-        return new AlertDialog.Builder(this)
-        .setView(mDialog)
-        .setMessage(R.string.load_title_dialog_message)
-        .create();
     }
 }

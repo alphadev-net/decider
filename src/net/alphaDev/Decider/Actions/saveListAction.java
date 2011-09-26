@@ -26,7 +26,7 @@ public class saveListAction implements OnClickListener {
     public void onClick(DialogInterface di, int i) {
         decideListAdapter dataSource = (decideListAdapter) Utility.extractAdapter(caller);
         deciderStorage mDB = ((Decider) caller).getDatabase();
-        mDB.writeList(dataSource.getTitle(), dataSource);
+        mDB.writeList(input.getText().toString(), dataSource);
 
         Toast.makeText(caller, "success", Toast.LENGTH_SHORT);
         di.dismiss();

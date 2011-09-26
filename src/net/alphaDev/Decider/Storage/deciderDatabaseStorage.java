@@ -21,7 +21,7 @@ import net.alphaDev.Decider.decideListAdapter;
 public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderStorage {
     // Set up constants used throughout class
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "decider";
+    private static final String DATABASE_NAME = "decider.db";
     private static final String LIST_LABELS = "list";
     private static final String LIST_ENTRIES = "entries";
     private Context mContext;
