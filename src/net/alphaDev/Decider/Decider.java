@@ -6,14 +6,20 @@ import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
+import net.alphaDev.Decider.Actions.saveListAction;
 import net.alphaDev.Decider.Storage.deciderStorage;
 import net.alphaDev.Decider.Storage.deciderStorageFactory;
 
@@ -30,7 +36,7 @@ public class Decider extends Activity {
 
     // Fields for the UI Components
     private Button decideButton;
-    private Button addButton;
+    private ImageButton addButton;
     private WheelView wheel;
 
     // Datasources (flagged static for synchronized access)
@@ -54,7 +60,7 @@ public class Decider extends Activity {
 
         // Get references to the UI component instances
         wheel = (WheelView) findViewById(R.id.list);
-        addButton = (Button) findViewById(R.id.addbtn);
+        addButton = (ImageButton) findViewById(R.id.addbtn);
         decideButton = (Button) findViewById(R.id.decidebtn);
 
         // Set Listeners
@@ -87,11 +93,13 @@ public class Decider extends Activity {
             case R.id.save_btn:
                 // Show Save Dialog
                 // (has it's own ActionHandling)
-                saveList();
+                showDialog(DIALAG_SAVE_ID);
+                return true;
             case R.id.load_btn:
                 // Show Load Dialog
                 //TODO: implement
                 showDialog(DIALAG_LOAD_ID);
+                return true;
             case R.id.quit_btn:
                 // Exit
                 //TODO: App might ask to save List?
@@ -156,40 +164,38 @@ public class Decider extends Activity {
     }
 
     private Dialog createSaveDialog() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View mDialog = inflater.inflate(R.layout.save_dialog,
+                               (ViewGroup) findViewById(R.id.save_dialog));
+        EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+
         return new AlertDialog.Builder(this)
+        .setView(mDialog)
         .setMessage(R.string.list_title_dialog_message)
+        .setPositiveButton(R.string.save_btn, new saveListAction(this, input))
         .create();
     }
 
     private void prepareSaveDialog(Dialog mDialog) {
-        final EditText input = new EditText(this);
-//        dialog.
-//        mDialog
-        //dialog.setPositiveButton(R.string.save_btn, new saveListAction(this, input));
+        EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+        ITitle currentList = (ITitle) adapter;
+        input.setText(currentList.getTitle());
     }
 
     private void prepareLoadDialog(Dialog dialog) {
-        
+        ListAdapter listAdapter = getDatabase().getLists();
+        ListView list = (ListView) dialog.findViewById(R.id.load_list);
+        list.setAdapter(listAdapter);
     }
 
     private Dialog createLoadDialog() {
-        ListAdapter list = getDatabase().getLists();
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View mDialog = inflater.inflate(R.layout.load_dialog,
+                               (ViewGroup) findViewById(R.id.load_dialog));
+        
         return new AlertDialog.Builder(this)
+        .setView(mDialog)
         .setMessage(R.string.load_title_dialog_message)
-        //TODO: load list of items
-        .setItems(null, null)
         .create();
-    }
-
-    private void saveList() {
-        if(adapter.getItemsCount() > 0) {
-            ITitle dataSource = (decideListAdapter) adapter;
-            if(dataSource.hasTitle()) {
-                showDialog(DIALAG_SAVE_ID);
-            }
-
-            deciderStorage mDB = getDatabase();
-            mDB.writeList(dataSource.getTitle(), (decideListAdapter) adapter);
-        }
     }
 }

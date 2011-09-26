@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -33,20 +34,24 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
 
     @Override
     public void onCreate(SQLiteDatabase mDB) {
-        // Setup tables on first DB usage
+        Log.w("Decider", "Creating database tables");
+        // Setup tables on first DB usage;
         String sql = "CREATE TABLE " + LIST_LABELS +
-            " (ID INT(8) PRIMARY KEY AUTOINCREMENT, LABEL TEXT)";
+            " (ID INTEGER PRIMARY KEY AUTOINCREMENT, LABEL TEXT)";
         mDB.execSQL(sql);
 
         sql = "CREATE TABLE " + LIST_ENTRIES +
-            " (ID INT(8) PRIMARY KEY AUTOINCREMENT, LABEL INT(8), ITEM TEXT)";
+            " (ID INTEGER PRIMARY KEY AUTOINCREMENT, LABEL INTEGER, ITEM TEXT)";
         mDB.execSQL(sql);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqld, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Perform database changes after app update
-        //sqld.execSQL("");
+        Log.w("Decider", "Upgrading database, this will drop tables and recreate.");
+        db.execSQL("DROP TABLE IF EXISTS " + LIST_LABELS);
+        db.execSQL("DROP TABLE IF EXISTS " + LIST_ENTRIES);
+        onCreate(db);
     }
 
     public void writeList(String label, decideListAdapter entries) {
@@ -65,6 +70,7 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
             entrieValues.put("ITEM", entries.getItemText(i).toString());
             mDB.insert(LIST_ENTRIES, null, entrieValues);
         }
+        mDB.setTransactionSuccessful();
         mDB.endTransaction();
     }
 
@@ -98,7 +104,7 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
 
         // Establish read-only connection to the database
         SQLiteDatabase mDB = getReadableDatabase();
-        
+
         // Prepare query for ListItems
         String sql = "SELECT * FROM " + LIST_ENTRIES + " WHERE ID='?'";
         String[] selectionArgs = new String[]{Integer.toString(listID)};

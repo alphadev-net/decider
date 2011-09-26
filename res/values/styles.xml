@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="filling">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>   
+    </style>
+    <style name="wrapping">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="wrapfill">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+    <style name="fillwrap">
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="wrapfill.hor">
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="wrapfill.vert">
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="wrapfill.about">
+        <item name="android:textColor">#FFF</item>
+    </style>
+    <style name="wrapfill.about.Click">
+        <item name="android:clickable">true</item>
+        <item name="android:onClick">aboutHandler</item>
+    </style>
+    <style name="mainLayout" parent="filling">
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="mainWheel" parent="wrapfill">
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="mainAddText" parent="wrapping">
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="mainAdd" parent="fillwrap">
+        <item name="android:src">@drawable/ic_menu_add</item>
+    </style>
+    <style name="aboutLayout" parent="wrapfill.hor">
+        <item name="android:padding">10dp</item>
+    </style>
+    <style name="aboutSubLayout" parent="wrapping">
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="aboutPicture" parent="wrapping">
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+</resources>

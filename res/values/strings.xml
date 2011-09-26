@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Decider</string>
-    <string name="add_btn">add</string>
     <string name="decide_btn">decide</string>
 
     <string name="list_title_dialog_message">Name of the List:</string>
     <string name="load_title_dialog_message">Open List:</string>
 
-    <string name="about_title">Decider 1.1.0</string>
+    <string name="about_title">Decider 1.2.0</string>
     <string name="about_name">Jan Seeger</string>
     <string name="about_mail">jan@alphadev.net</string>
     <string name="about_http">jan.alphadev.net/decider</string>
