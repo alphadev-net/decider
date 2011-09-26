@@ -2,11 +2,10 @@ package net.alphaDev.Decider.Actions;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kankan.wheel.widget.WheelView;
 import net.alphaDev.Decider.Util.Utility;
 import net.alphaDev.Decider.decideListAdapter;
@@ -24,10 +23,9 @@ public class decideAction implements OnClickListener {
 
     public void onClick(View view) {
         decideListAdapter adapter = (decideListAdapter) Utility.extractAdapter(caller);
-        Logger logger = Logger.getLogger("Decider");
 
         int random = pickNumberLowerThan(adapter.getItemsCount());
-        logger.log(Level.INFO, "item: {0}", random);
+        Log.i("Decider", "item: " + random);
 
         InputMethodManager mgr = (InputMethodManager) 
                 caller.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);

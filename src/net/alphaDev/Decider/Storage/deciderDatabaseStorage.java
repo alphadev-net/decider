@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 import net.alphaDev.Decider.decideListAdapter;
@@ -76,23 +77,30 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
 
     public ListAdapter getLists() {
         SQLiteDatabase mDB = getReadableDatabase();
-        final Cursor bla = mDB.rawQuery("SELECT * FROM bla", null);
+        final Cursor cursor = mDB.rawQuery("SELECT * FROM " + LIST_LABELS, null);
         return new BaseAdapter() {
             public int getCount() {
-                return bla.getCount();
+                return cursor.getCount();
             }
 
             public Object getItem(int i) {
-                bla.moveToPosition(i);
-                return bla.getColumnIndex("LABEL");
+                cursor.moveToPosition(i);
+                return cursor.getString(cursor.getColumnIndex("LABEL"));
             }
 
             public long getItemId(int i) {
-                return i;
+                cursor.moveToPosition(i);
+                return cursor.getInt(cursor.getColumnIndex("ID"));
             }
 
             public View getView(int i, View view, ViewGroup vg) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                if(view == null) {
+                    TextView newView = new TextView(mContext);
+                    newView.setTextSize(24);
+                    newView.setText(getItem(i).toString());
+                    return newView;
+                }
+                return view;
             }
         };
     }
@@ -106,14 +114,14 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
         SQLiteDatabase mDB = getReadableDatabase();
 
         // Prepare query for ListItems
-        String sql = "SELECT * FROM " + LIST_ENTRIES + " WHERE ID='?'";
+        String sql = "SELECT * FROM " + LIST_ENTRIES + " WHERE LABEL = ?";
         String[] selectionArgs = new String[]{Integer.toString(listID)};
 
         // Execute query
         Cursor listCursor = mDB.rawQuery(sql, selectionArgs);
         while(listCursor.moveToNext()) {
             // Add listItem label to tmpList
-            tmpList.add(listCursor.getString(3));
+            tmpList.add(listCursor.getString(listCursor.getColumnIndex("ITEM")));
         }
 
         // Populate mAdapter with the temporary List and return to caller

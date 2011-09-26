@@ -28,7 +28,6 @@ public class saveListAction implements OnClickListener {
         deciderStorage mDB = ((Decider) caller).getDatabase();
         mDB.writeList(input.getText().toString(), dataSource);
 
-        Toast.makeText(caller, "success", Toast.LENGTH_SHORT);
         di.dismiss();
     }
 }

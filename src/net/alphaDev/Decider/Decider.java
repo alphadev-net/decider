@@ -74,6 +74,11 @@ public class Decider extends Activity {
         return wheel;
     }
 
+    public void setAdapter(WheelViewAdapter adapter) {
+        Decider.adapter = adapter;
+        getWheel().setViewAdapter(adapter);
+    }
+
     // Provide OptionsMenu from XML
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,6 +202,7 @@ public class Decider extends Activity {
     private void prepareLoadDialog(Dialog dialog) {
         ListAdapter listAdapter = getDatabase().getLists();
         ListView list = (ListView) dialog.findViewById(R.id.load_list);
+        list.setOnItemClickListener(new loadListAction(this, dialog));
         list.setAdapter(listAdapter);
     }
 }
