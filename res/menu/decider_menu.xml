@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/save_btn"
+          android:icon="@drawable/ic_menu_save"
           android:title="@string/save_btn" />
     <item android:id="@+id/load_btn"
+          android:icon="@drawable/ic_menu_archive"
           android:title="@string/load_btn" />
     <item android:id="@+id/about_btn"
+          android:icon="@drawable/ic_menu_info_details"
           android:title="@string/about_btn" />
     <item android:id="@+id/quit_btn"
+          android:icon="@drawable/ic_menu_close_clear_cancel"
           android:title="@string/quit_btn" />
 </menu>

@@ -5,6 +5,8 @@ import net.alphaDev.Decider.Actions.addAction;
 import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import net.alphaDev.Decider.Actions.loadListAction;
@@ -97,8 +100,11 @@ public class Decider extends Activity {
                 return true;
             case R.id.save_btn:
                 // Show Save Dialog
-                // (has it's own ActionHandling)
-                showDialog(DIALAG_SAVE_ID);
+                if(adapter.getItemsCount() > 0) {
+                    showDialog(DIALAG_SAVE_ID);
+                } else {
+                    Toast.makeText(this, getString(R.string.empty_save), Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.load_btn:
                 // Show Load Dialog
@@ -161,11 +167,12 @@ public class Decider extends Activity {
     }
 
     private Dialog createAboutDialog() {
-        Dialog mDialog = new Dialog(this);
-        mDialog.setContentView(R.layout.about_dialog);
-        mDialog.setTitle(R.string.about_title);
-        //TODO: implement clickable links
-        return mDialog;
+        View mDialog = createDialog(R.layout.about_dialog);
+
+        return new AlertDialog.Builder(this)
+        .setView(mDialog)
+        .setTitle(R.string.about_title)
+        .create();
     }
 
     private Dialog createSaveDialog() {
@@ -174,7 +181,7 @@ public class Decider extends Activity {
 
         return new AlertDialog.Builder(this)
         .setView(mDialog)
-        .setMessage(R.string.list_title_dialog_message)
+        .setTitle(R.string.list_title_dialog_message)
         .setPositiveButton(R.string.save_btn, new saveListAction(this, input))
         .create();
     }
@@ -184,7 +191,7 @@ public class Decider extends Activity {
 
         return new AlertDialog.Builder(this)
         .setView(mDialog)
-        .setMessage(R.string.load_title_dialog_message)
+        .setTitle(R.string.load_title_dialog_message)
         .create();
     }
 
@@ -204,5 +211,28 @@ public class Decider extends Activity {
         ListView list = (ListView) dialog.findViewById(R.id.load_list);
         list.setOnItemClickListener(new loadListAction(this, dialog));
         list.setAdapter(listAdapter);
+    }
+
+    public void aboutHandler(View caller) {
+        Intent intent = null;
+        switch(caller.getId()) {
+            case R.id.about_http:
+                intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(getString(R.string.about_http)));
+                break;
+            case R.id.about_mail:
+                String ver = getString(R.string.app_name) + " " + getString(R.string.app_version);
+                intent = new Intent(Intent.ACTION_SEND)
+                .setType("plain/text")
+                .putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.about_mail)})
+                .putExtra(Intent.EXTRA_SUBJECT, ver);
+                break;
+            default:
+                break;
+        }
+
+        if(intent != null) {
+            startActivity(intent);
+        }
     }
 }

@@ -44,6 +44,7 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
         sql = "CREATE TABLE " + LIST_ENTRIES +
             " (ID INTEGER PRIMARY KEY AUTOINCREMENT, LABEL INTEGER, ITEM TEXT)";
         mDB.execSQL(sql);
+        populateDB(mDB);
     }
 
     @Override
@@ -55,24 +56,51 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
         onCreate(db);
     }
 
+    private void populateDB(SQLiteDatabase mDB) {
+        mDB.beginTransaction();
+        int last = (int) writeListEntry(mDB, "Yes / No");
+        writeEntriesEntry(mDB, last, "Yes");
+        writeEntriesEntry(mDB, last, "No");
+        last = (int) writeListEntry(mDB, "Yes / No / Maybe");
+        writeEntriesEntry(mDB, last, "Yes");
+        writeEntriesEntry(mDB, last, "No");
+        writeEntriesEntry(mDB, last, "Maybe");
+        last = (int) writeListEntry(mDB, "A / B / C / D / E");
+        writeEntriesEntry(mDB, last, "A");
+        writeEntriesEntry(mDB, last, "B");
+        writeEntriesEntry(mDB, last, "C");
+        writeEntriesEntry(mDB, last, "D");
+        writeEntriesEntry(mDB, last, "E");
+        mDB.setTransactionSuccessful();
+        mDB.endTransaction();
+    }
+
     public void writeList(String label, decideListAdapter entries) {
         SQLiteDatabase mDB = getWritableDatabase();
         mDB.beginTransaction();
 
         // write list metadata to the database
-        ContentValues labelValues = new ContentValues(1);
-        labelValues.put("LABEL", label);
-        int lastID = (int) mDB.insert(LIST_LABELS, null, labelValues);
+        int lastID = (int) writeListEntry(mDB, label);
 
         // write the list contents to the database
         for (int i = 0; i < entries.getItemsCount(); i++) {
-            ContentValues entrieValues = new ContentValues(2);
-            entrieValues.put("LABEL", lastID);
-            entrieValues.put("ITEM", entries.getItemText(i).toString());
-            mDB.insert(LIST_ENTRIES, null, entrieValues);
+            writeEntriesEntry(mDB, lastID, entries.getItemText(i).toString());
         }
         mDB.setTransactionSuccessful();
         mDB.endTransaction();
+    }
+
+    private long writeListEntry(SQLiteDatabase mDB, String label) {
+        ContentValues labelValues = new ContentValues(1);
+        labelValues.put("LABEL", label);
+        return mDB.insert(LIST_LABELS, null, labelValues);
+    }
+
+    private void writeEntriesEntry(SQLiteDatabase mDB, int parent, String label) {
+        ContentValues entrieValues = new ContentValues(2);
+        entrieValues.put("LABEL", parent);
+        entrieValues.put("ITEM", label);
+        mDB.insert(LIST_ENTRIES, null, entrieValues);
     }
 
     public ListAdapter getLists() {
