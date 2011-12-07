@@ -1,8 +1,6 @@
 package net.alphaDev.Decider;
 
 import android.app.Dialog;
-import net.alphaDev.Decider.Actions.addAction;
-import net.alphaDev.Decider.Actions.decideAction;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -21,6 +19,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
+import net.alphaDev.Decider.Actions.addAction;
+import net.alphaDev.Decider.Actions.decideAction;
 import net.alphaDev.Decider.Actions.loadListAction;
 import net.alphaDev.Decider.Actions.saveListAction;
 import net.alphaDev.Decider.Storage.deciderStorage;
@@ -218,7 +218,15 @@ public class Decider extends Activity {
         switch(caller.getId()) {
             case R.id.about_http:
                 intent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(getString(R.string.about_http)));
+                    Uri.parse("http://" + getString(R.string.about_http)));
+                break;
+            case R.id.about_icon_link:
+                intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.wpclipart.com/"));
+                break;
+            case R.id.about_wheel_link:
+                intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://code.google.com/p/android-wheel/"));
                 break;
             case R.id.about_mail:
                 String ver = getString(R.string.app_name) + " " + getString(R.string.app_version);
