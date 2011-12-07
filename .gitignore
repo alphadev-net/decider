@@ -1,9 +1,12 @@
-/bin/
+﻿/bin/
 /gen/
-/nbandroid/ö
+/nbandroid/
 /libs/wheel/gen/
 /libs/wheel/bin/
 *.bak
 .DS_Store
 /libs/wheel/nbandroid/
+/libs/wheel/local.properties
 /nbandroid/
+local.properties
+/bin/
