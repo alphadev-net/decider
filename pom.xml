@@ -5,6 +5,7 @@
 
     <groupId>net.alphaDev</groupId>
     <artifactId>Decider</artifactId>
+    <version>2</version>
     <packaging>apk</packaging>
     <name>Decider</name>
 
