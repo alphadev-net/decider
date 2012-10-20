@@ -11,3 +11,5 @@
 local.properties
 /private
 /bin/
+/wheel/target/
+/Decider/target/
