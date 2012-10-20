@@ -1,8 +1,8 @@
 package net.alphaDev.Decider;
 
-import android.app.Dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -111,10 +111,6 @@ public class Decider extends Activity {
                 //TODO: implement
                 showDialog(DIALAG_LOAD_ID);
                 return true;
-            case R.id.quit_btn:
-                // Exit
-                //TODO: App might ask to save List?
-                System.exit(0);
             default:
                 // default Android click handling
                 return super.onOptionsItemSelected(item);
