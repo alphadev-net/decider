@@ -1,9 +1,9 @@
 package net.alphaDev.Decider.Util;
 
 import android.app.Activity;
-import net.alphaDev.Decider.Decider;
-import kankan.wheel.widget.adapters.WheelViewAdapter;
 import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.WheelViewAdapter;
+import net.alphaDev.Decider.DeciderActivity;
 
 /**
  *
@@ -15,6 +15,6 @@ public class Utility {
     }
 
     public static WheelView extractWheel(Activity activity) {
-        return ((Decider) activity).getWheel();
+        return ((DeciderActivity) activity).getWheel();
     }
 }

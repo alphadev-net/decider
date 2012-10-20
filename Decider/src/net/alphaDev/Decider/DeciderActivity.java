@@ -30,7 +30,7 @@ import net.alphaDev.Decider.Storage.deciderStorageFactory;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class Decider extends Activity {
+public class DeciderActivity extends Activity {
 
     // Setup DialogIDs
     public static final int DIALOG_ABOUT_ID = 0;
@@ -78,7 +78,7 @@ public class Decider extends Activity {
     }
 
     public void setAdapter(WheelViewAdapter adapter) {
-        Decider.adapter = adapter;
+        adapter = adapter;
         getWheel().setViewAdapter(adapter);
     }
 
