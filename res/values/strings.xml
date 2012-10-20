@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Decider</string>
-    <string name="app_version">1.4.0</string>
+    <string name="app_version">2.0.0</string>
 
     <string name="list_title_dialog_message">Name of the List:</string>
     <string name="load_title_dialog_message">Open List:</string>
@@ -13,6 +13,7 @@
 
     <string name="empty_save">You shouldn\'t be saving empty lists!</string>
     <string name="decide_btn">decide</string>
+    <string name="add_btn">Add</string>
     <string name="save_btn">Save</string>
     <string name="load_btn">Load</string>
     <string name="about_btn">About</string>

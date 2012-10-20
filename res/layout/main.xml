@@ -5,17 +5,4 @@
     <kankan.wheel.widget.WheelView
         android:id="@+id/list"
         style="@style/mainWheel" />
-    <Button
-        android:id="@+id/decidebtn"
-        android:text="@string/decide_btn"
-        style="@style/wrapfill" />
-    <LinearLayout
-        style="@style/wrapfill.hor" >
-        <EditText
-            android:id="@+id/addlabel"
-            style="@style/mainAddText" />
-        <ImageButton
-            android:id="@+id/addbtn"
-            style="@style/mainAdd" />
-    </LinearLayout>
 </LinearLayout>
