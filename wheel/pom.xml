@@ -26,6 +26,11 @@
   
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/res</directory>
+            </resource>
+        </resources>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
