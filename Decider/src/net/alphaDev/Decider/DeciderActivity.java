@@ -19,6 +19,7 @@ import android.widget.Toast;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import net.alphaDev.Decider.Actions.AddAction;
+import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Actions.LoadListAction;
 import net.alphaDev.Decider.Actions.SaveListAction;
 import net.alphaDev.Decider.Storage.DeciderStorage;
@@ -190,6 +191,7 @@ public class DeciderActivity extends Activity {
         .setView(mDialog)
         .setTitle(R.string.list_title_dialog_message)
         .setPositiveButton(R.string.save_btn, new SaveListAction(this, input))
+        .setNeutralButton(R.string.cancel, new DialogCancelledAction())
         .create();
     }
 
@@ -202,6 +204,7 @@ public class DeciderActivity extends Activity {
         .setView(mDialog)
         .setTitle(R.string.list_title_dialog_message)
         .setPositiveButton(R.string.save_btn, new AddAction(this))
+        .setNeutralButton(R.string.cancel, new DialogCancelledAction())
         .create();
     }
 
