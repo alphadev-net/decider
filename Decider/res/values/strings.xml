@@ -18,7 +18,6 @@
     <string name="save_btn">Save</string>
     <string name="load_btn">Load</string>
     <string name="about_btn">About</string>
-    <string name="quit_btn">Quit</string>
 
     <string name="cancel">Cancel</string>
 </resources>
