@@ -202,8 +202,8 @@ public class DeciderActivity extends Activity {
 
         return new AlertDialog.Builder(this)
         .setView(mDialog)
-        .setTitle(R.string.list_title_dialog_message)
-        .setPositiveButton(R.string.save_btn, new AddAction(this))
+        .setTitle(R.string.add_title_dialog_message)
+        .setPositiveButton(R.string.add_btn, new AddAction(this))
         .setNeutralButton(R.string.cancel, new DialogCancelledAction())
         .create();
     }
