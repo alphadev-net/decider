@@ -1,6 +1,5 @@
 package net.alphaDev.Decider;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,14 +7,15 @@ import android.net.Uri;
 import android.util.Log;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import net.alphaDev.Decider.Actions.AddAction;
@@ -29,7 +29,7 @@ import net.alphaDev.Decider.Storage.DeciderStorageFactory;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DeciderActivity extends Activity {
+public class DeciderActivity extends SherlockActivity {
 
     // Setup DialogIDs
     public static final int DIALOG_ABOUT_ID = 0;
@@ -79,7 +79,7 @@ public class DeciderActivity extends Activity {
     // Provide OptionsMenu from XML
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.decider_menu, menu);
         return true;
     }
