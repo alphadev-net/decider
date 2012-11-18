@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
-import net.alphaDev.Decider.Decider;
+import net.alphaDev.Decider.DeciderActivity;
 import net.alphaDev.Decider.Storage.DeciderStorage;
 import net.alphaDev.Decider.Util.Utility;
 import net.alphaDev.Decider.DecideListAdapter;
@@ -25,7 +25,7 @@ public class SaveListAction implements OnClickListener {
 
     public void onClick(DialogInterface di, int i) {
         DecideListAdapter dataSource = (DecideListAdapter) Utility.extractAdapter(caller);
-        DeciderStorage mDB = ((Decider) caller).getDatabase();
+        DeciderStorage mDB = ((DeciderActivity) caller).getDatabase();
         mDB.writeList(input.getText().toString(), dataSource);
 
         di.dismiss();

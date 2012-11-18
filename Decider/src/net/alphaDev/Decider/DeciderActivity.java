@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import net.alphaDev.Decider.Actions.AddAction;
-import net.alphaDev.Decider.Actions.DecideAction;
 import net.alphaDev.Decider.Actions.LoadListAction;
 import net.alphaDev.Decider.Actions.SaveListAction;
 import net.alphaDev.Decider.Storage.DeciderStorage;
@@ -34,12 +34,11 @@ public class DeciderActivity extends Activity {
 
     // Setup DialogIDs
     public static final int DIALOG_ABOUT_ID = 0;
-    public static final int DIALAG_SAVE_ID = 1;
-    public static final int DIALAG_LOAD_ID = 2;
+    public static final int DIALOG_SAVE_ID = 1;
+    public static final int DIALOG_LOAD_ID = 2;
+    public static final int DIALOG_ADD_ID = 4;
 
     // Fields for the UI Components
-    private Button decideButton;
-    private ImageButton addButton;
     private WheelView wheel;
 
     // Datasources (flagged static for synchronized access)
@@ -58,18 +57,14 @@ public class DeciderActivity extends Activity {
 
         // Set empty DefaultListAdapter
         if (adapter == null) {
-            adapter = new DecideListAdapter(getApplicationContext());
+            adapter = new DecideListAdapter(this);
         }
 
         // Get references to the UI component instances
         wheel = (WheelView) findViewById(R.id.list);
-        addButton = (ImageButton) findViewById(R.id.addbtn);
-        decideButton = (Button) findViewById(R.id.decidebtn);
 
         // Set Listeners
         wheel.setViewAdapter(adapter);
-        addButton.setOnClickListener(new AddAction(this));
-        decideButton.setOnClickListener(new DecideAction(this));
     }
 
     // Emit WheelView to let external stuff manipulate
@@ -94,6 +89,14 @@ public class DeciderActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.decide_btn:
+                int random = pickNumberLowerThan(adapter.getItemsCount());
+                Log.i("Decider", "item: " + random);
+                wheel.setCurrentItem(random, true);
+                return true;
+            case R.id.add_btn:
+                showDialog(DIALOG_ADD_ID);
+                return true;
             case R.id.about_btn:
                 // Show About Dialog
                 showDialog(DIALOG_ABOUT_ID);
@@ -101,20 +104,23 @@ public class DeciderActivity extends Activity {
             case R.id.save_btn:
                 // Show Save Dialog
                 if(adapter.getItemsCount() > 0) {
-                    showDialog(DIALAG_SAVE_ID);
+                    showDialog(DIALOG_SAVE_ID);
                 } else {
                     Toast.makeText(this, getString(R.string.empty_save), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.load_btn:
                 // Show Load Dialog
-                //TODO: implement
-                showDialog(DIALAG_LOAD_ID);
+                showDialog(DIALOG_LOAD_ID);
                 return true;
             default:
                 // default Android click handling
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private int pickNumberLowerThan(int thisNumber) {
+        return (int)(Math.floor(Math.random() * thisNumber));
     }
 
     // Emit Database (Singleton like)
@@ -131,13 +137,16 @@ public class DeciderActivity extends Activity {
         Dialog mDialog;
 
         switch (id) {
+            case DIALOG_ADD_ID:
+                mDialog = createAddDialog();
+                break;
             case DIALOG_ABOUT_ID:
                 mDialog = createAboutDialog();
                 break;
-            case DIALAG_SAVE_ID:
+            case DIALOG_SAVE_ID:
                 mDialog = createSaveDialog();
                 break;
-            case DIALAG_LOAD_ID:
+            case DIALOG_LOAD_ID:
                 mDialog = createLoadDialog();
                 break;
             default:
@@ -149,11 +158,14 @@ public class DeciderActivity extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         switch (id) {
-            case DIALAG_SAVE_ID:
+            case DIALOG_ADD_ID:
+                prepareAddDialog(dialog);
+                break;
+            case DIALOG_SAVE_ID:
                 // set/confirm the current lists name
                 prepareSaveDialog(dialog);
                 break;
-            case DIALAG_LOAD_ID:
+            case DIALOG_LOAD_ID:
                 // re-populate list of loadable lists
                 prepareLoadDialog(dialog);
                 break;
@@ -174,11 +186,24 @@ public class DeciderActivity extends Activity {
     private Dialog createSaveDialog() {
         View mDialog = createDialog(R.layout.save_dialog);
         EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+        input.setId(R.id.DIALOG_SAVE_TEXT);
 
         return new AlertDialog.Builder(this)
         .setView(mDialog)
         .setTitle(R.string.list_title_dialog_message)
         .setPositiveButton(R.string.save_btn, new SaveListAction(this, input))
+        .create();
+    }
+
+    private Dialog createAddDialog() {
+        View mDialog = createDialog(R.layout.save_dialog);
+        EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+        input.setId(R.id.DIALOG_ADD_TEXT);
+
+        return new AlertDialog.Builder(this)
+        .setView(mDialog)
+        .setTitle(R.string.list_title_dialog_message)
+        .setPositiveButton(R.string.save_btn, new AddAction(this))
         .create();
     }
 
@@ -197,9 +222,13 @@ public class DeciderActivity extends Activity {
     }
 
     private void prepareSaveDialog(Dialog mDialog) {
-        EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+        EditText input = (EditText) mDialog.findViewById(R.id.DIALOG_SAVE_TEXT);
         ITitle currentList = (ITitle) adapter;
         input.setText(currentList.getTitle());
+    }
+
+    private void prepareAddDialog(Dialog mDialog) {
+        EditText input = (EditText) mDialog.findViewById(R.id.DIALOG_ADD_TEXT);
     }
 
     private void prepareLoadDialog(Dialog dialog) {
