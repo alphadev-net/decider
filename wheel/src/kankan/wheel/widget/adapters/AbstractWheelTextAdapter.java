@@ -42,9 +42,12 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     /** Default text color */
     public static final int LABEL_COLOR = 0xFF700070;
 
+    /** Default text size */
+    public static final int DEFAULT_TEXT_SIZE = 24;
+
     // Text settings
     private int textColor = DEFAULT_TEXT_COLOR;
-    private int textSize = R.integer.DEFAULT_TEXT_SIZE;
+    private int textSize = DEFAULT_TEXT_SIZE;
     
     // Current context
     protected Context context;
@@ -102,6 +105,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      * @param textColor the text color to set
      */
     public void setTextColor(int textColor) {
+        this.textColor = textColor;
     }
     
     /**
