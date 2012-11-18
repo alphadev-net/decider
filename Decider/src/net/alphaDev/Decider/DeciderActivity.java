@@ -19,12 +19,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
-import net.alphaDev.Decider.Actions.addAction;
-import net.alphaDev.Decider.Actions.decideAction;
-import net.alphaDev.Decider.Actions.loadListAction;
-import net.alphaDev.Decider.Actions.saveListAction;
-import net.alphaDev.Decider.Storage.deciderStorage;
-import net.alphaDev.Decider.Storage.deciderStorageFactory;
+import net.alphaDev.Decider.Actions.AddAction;
+import net.alphaDev.Decider.Actions.DecideAction;
+import net.alphaDev.Decider.Actions.LoadListAction;
+import net.alphaDev.Decider.Actions.SaveListAction;
+import net.alphaDev.Decider.Storage.DeciderStorage;
+import net.alphaDev.Decider.Storage.DeciderStorageFactory;
 
 /**
  *
@@ -44,7 +44,7 @@ public class DeciderActivity extends Activity {
 
     // Datasources (flagged static for synchronized access)
     private static WheelViewAdapter adapter;
-    private static deciderStorage database;
+    private static DeciderStorage database;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -58,7 +58,7 @@ public class DeciderActivity extends Activity {
 
         // Set empty DefaultListAdapter
         if (adapter == null) {
-            adapter = new decideListAdapter(getApplicationContext());
+            adapter = new DecideListAdapter(getApplicationContext());
         }
 
         // Get references to the UI component instances
@@ -68,8 +68,8 @@ public class DeciderActivity extends Activity {
 
         // Set Listeners
         wheel.setViewAdapter(adapter);
-        addButton.setOnClickListener(new addAction(this));
-        decideButton.setOnClickListener(new decideAction(this));
+        addButton.setOnClickListener(new AddAction(this));
+        decideButton.setOnClickListener(new DecideAction(this));
     }
 
     // Emit WheelView to let external stuff manipulate
@@ -118,9 +118,9 @@ public class DeciderActivity extends Activity {
     }
 
     // Emit Database (Singleton like)
-    public deciderStorage getDatabase() {
+    public DeciderStorage getDatabase() {
         if(database == null) {
-            database = deciderStorageFactory.buildStorage(this);
+            database = DeciderStorageFactory.buildStorage(this);
         }
 
         return database;
@@ -178,7 +178,7 @@ public class DeciderActivity extends Activity {
         return new AlertDialog.Builder(this)
         .setView(mDialog)
         .setTitle(R.string.list_title_dialog_message)
-        .setPositiveButton(R.string.save_btn, new saveListAction(this, input))
+        .setPositiveButton(R.string.save_btn, new SaveListAction(this, input))
         .create();
     }
 
@@ -205,7 +205,7 @@ public class DeciderActivity extends Activity {
     private void prepareLoadDialog(Dialog dialog) {
         ListAdapter listAdapter = getDatabase().getLists();
         ListView list = (ListView) dialog.findViewById(R.id.load_list);
-        list.setOnItemClickListener(new loadListAction(this, dialog));
+        list.setOnItemClickListener(new LoadListAction(this, dialog));
         list.setAdapter(listAdapter);
     }
 

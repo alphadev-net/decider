@@ -13,13 +13,13 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
-import net.alphaDev.Decider.decideListAdapter;
+import net.alphaDev.Decider.DecideListAdapter;
 
 /**
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderStorage {
+public class DeciderDatabaseStorage extends SQLiteOpenHelper implements DeciderStorage {
     // Set up constants used throughout class
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "decider.db";
@@ -27,7 +27,7 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
     private static final String LIST_ENTRIES = "entries";
     private Context mContext;
 
-    public deciderDatabaseStorage(Context context) {
+    public DeciderDatabaseStorage(Context context) {
         // Let the OS handle the Database stuff
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
@@ -75,7 +75,7 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
         mDB.endTransaction();
     }
 
-    public void writeList(String label, decideListAdapter entries) {
+    public void writeList(String label, DecideListAdapter entries) {
         SQLiteDatabase mDB = getWritableDatabase();
         mDB.beginTransaction();
 
@@ -133,9 +133,9 @@ public class deciderDatabaseStorage extends SQLiteOpenHelper implements deciderS
         };
     }
 
-    public decideListAdapter readList(int listID) {
+    public DecideListAdapter readList(int listID) {
         // Create new (and emtpy) decideListAdapter
-        decideListAdapter mAdapter = new decideListAdapter(mContext);
+        DecideListAdapter mAdapter = new DecideListAdapter(mContext);
         Collection<String> tmpList = new ArrayList<String>();
 
         // Establish read-only connection to the database

@@ -9,11 +9,11 @@ import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class decideListAdapter extends AbstractWheelTextAdapter implements ITitle {
+public class DecideListAdapter extends AbstractWheelTextAdapter implements ITitle {
     private ArrayList<CharSequence> dataList;
     private String listLabel;
 
-    public decideListAdapter(Context context) {
+    public DecideListAdapter(Context context) {
         super(context);
         dataList = new ArrayList<CharSequence>();
     }

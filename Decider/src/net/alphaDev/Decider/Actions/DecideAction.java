@@ -8,21 +8,21 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import kankan.wheel.widget.WheelView;
 import net.alphaDev.Decider.Util.Utility;
-import net.alphaDev.Decider.decideListAdapter;
+import net.alphaDev.Decider.DecideListAdapter;
 
 /**
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class decideAction implements OnClickListener {
+public class DecideAction implements OnClickListener {
     private final Activity caller;
 
-    public decideAction(Activity caller) {
+    public DecideAction(Activity caller) {
         this.caller = caller;
     }
 
     public void onClick(View view) {
-        decideListAdapter adapter = (decideListAdapter) Utility.extractAdapter(caller);
+        DecideListAdapter adapter = (DecideListAdapter) Utility.extractAdapter(caller);
 
         int random = pickNumberLowerThan(adapter.getItemsCount());
         Log.i("Decider", "item: " + random);

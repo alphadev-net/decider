@@ -11,11 +11,11 @@ import net.alphaDev.Decider.Decider;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class loadListAction implements OnItemClickListener {
+public class LoadListAction implements OnItemClickListener {
     private final Decider caller;
     private final Dialog parent;
 
-    public loadListAction(Decider caller, Dialog parent) {
+    public LoadListAction(Decider caller, Dialog parent) {
         this.caller = caller;
         this.parent = parent;
     }
