@@ -1,6 +1,6 @@
 project.modules.each {
     try {
-        def manifestFile = new File("${it}/AndroidManifest.xml")
+        def manifestFile = new File("${project.basedir}/AndroidManifest.xml")
         def ns = new groovy.xml.Namespace(
                                         "http://schemas.android.com/apk/res/android", "ns")
         def parser = new groovy.util.XmlParser(false, true)
