@@ -12,9 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -73,7 +71,7 @@ public class DeciderActivity extends Activity {
     }
 
     public void setAdapter(WheelViewAdapter adapter) {
-        adapter = adapter;
+        this.adapter = adapter;
         getWheel().setViewAdapter(adapter);
     }
 
