@@ -254,6 +254,10 @@ public class DeciderActivity extends SherlockActivity {
                 intent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://code.google.com/p/android-wheel/"));
                 break;
+            case R.id.about_sherlock_link:
+                intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://actionbarsherlock.com/"));
+                break;
             case R.id.about_mail:
                 String ver = getString(R.string.app_name) + " " + getString(R.string.app_version);
                 intent = new Intent(Intent.ACTION_SEND)
