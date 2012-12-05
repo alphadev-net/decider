@@ -47,6 +47,10 @@ public class DecideListAdapter extends AbstractWheelTextAdapter implements ITitl
         return dataList;
     }
 
+	public void replaceItem(int pos, CharSequence newItem) {
+		dataList.add(pos, newItem);
+	}
+	
     public boolean hasTitle() {
         return !listLabel.isEmpty();
     }

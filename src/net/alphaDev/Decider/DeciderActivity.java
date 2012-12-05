@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +20,7 @@ import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import net.alphaDev.Decider.Actions.AddAction;
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
+import net.alphaDev.Decider.Actions.EditItemAction;
 import net.alphaDev.Decider.Actions.LoadListAction;
 import net.alphaDev.Decider.Actions.SaveListAction;
 import net.alphaDev.Decider.Storage.DeciderStorage;
@@ -29,13 +30,16 @@ import net.alphaDev.Decider.Storage.DeciderStorageFactory;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DeciderActivity extends SherlockActivity {
+public class DeciderActivity 
+		extends SherlockActivity
+		implements View.OnLongClickListener {
 
     // Setup DialogIDs
     public static final int DIALOG_ABOUT_ID = 0;
     public static final int DIALOG_SAVE_ID = 1;
     public static final int DIALOG_LOAD_ID = 2;
     public static final int DIALOG_ADD_ID = 4;
+	public static final int DIALOG_EDIT_ID = 8;
 
     // Fields for the UI Components
     private WheelView wheel;
@@ -64,6 +68,8 @@ public class DeciderActivity extends SherlockActivity {
 
         // Set Listeners
         wheel.setViewAdapter(adapter);
+
+		wheel.setOnLongClickListener(this);
     }
 
     // Emit WheelView to let external stuff manipulate
@@ -122,6 +128,11 @@ public class DeciderActivity extends SherlockActivity {
         }
     }
 
+	public boolean onLongClick(View p1) {
+		showDialog(DIALOG_EDIT_ID);
+		return true;
+	}
+
     private int pickNumberLowerThan(int thisNumber) {
         return (int)(Math.floor(Math.random() * thisNumber));
     }
@@ -152,6 +163,9 @@ public class DeciderActivity extends SherlockActivity {
             case DIALOG_LOAD_ID:
                 mDialog = createLoadDialog();
                 break;
+			case DIALOG_EDIT_ID:
+				mDialog = createEditDialog();
+				break;
             default:
                 mDialog = super.onCreateDialog(id);
         }
@@ -199,6 +213,19 @@ public class DeciderActivity extends SherlockActivity {
         .create();
     }
 
+	private Dialog createEditDialog() {
+        View mDialog = createDialog(R.layout.save_dialog);
+        EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
+        input.setId(R.id.DIALOG_SAVE_TEXT);
+
+        return new AlertDialog.Builder(this)
+			.setView(mDialog)
+			.setTitle(R.string.list_title_dialog_message)
+			.setPositiveButton(R.string.save_btn, new EditItemAction(getWheel()))
+			.setNeutralButton(R.string.cancel, new DialogCancelledAction())
+			.create();
+    }
+	
     private Dialog createAddDialog() {
         View mDialog = createDialog(R.layout.save_dialog);
         EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
