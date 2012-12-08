@@ -12,3 +12,5 @@
 local.properties
 /private
 /bin/
+lib/actionbarsherlock/gen/com/actionbarsherlock/R.java
+lib/actionbarsherlock/gen/com/actionbarsherlock/BuildConfig.java
