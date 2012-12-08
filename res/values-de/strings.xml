@@ -6,6 +6,7 @@
     <string name="list_title_dialog_message">Name der Liste</string>
     <string name="load_title_dialog_message">Liste öffnen</string>
     <string name="add_title_dialog_message">Listeneintrag hinzufügen</string>
+    <string name="edit_title_dialog_message">Listeneintrag bearbeiten</string>
 
     <string name="about_title">Über</string>
     <string name="about_name">Jan Seeger</string>
@@ -14,6 +15,7 @@
 
     <string name="empty_save">Du willst eine leere Liste speichern!</string>
     <string name="decide_btn">Entscheide!</string>
+    <string name="edit_btn">Eintrag bearbeiten</string>
     <string name="add_btn">Hinzufügen</string>
     <string name="save_btn">Liste sichern</string>
     <string name="load_btn">Liste laden</string>

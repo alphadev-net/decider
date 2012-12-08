@@ -1,65 +1,74 @@
 package net.alphaDev.Decider;
 
-import android.content.Context;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
+import android.content.Context;
 
 /**
- *
+ * 
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DecideListAdapter extends AbstractWheelTextAdapter implements ITitle {
-    private ArrayList<CharSequence> dataList;
-    private String listLabel;
+public class DecideListAdapter
+		extends AbstractWheelTextAdapter
+		implements ITitle {
+	private final ArrayList<CharSequence> dataList;
+	private String listLabel;
 
-    public DecideListAdapter(Context context) {
-        super(context);
-        dataList = new ArrayList<CharSequence>();
-    }
+	public DecideListAdapter(Context context) {
+		super(context);
+		dataList = new ArrayList<CharSequence>();
+	}
 
-    public int getItemsCount() {
-        return dataList.size();
-    }
+	@Override
+	public int getItemsCount() {
+		return dataList.size();
+	}
 
-    @Override
-    public CharSequence getItemText(int i) {
-        return dataList.get(i);
-    }
+	@Override
+	public CharSequence getItemText(int i) {
+		return dataList.get(i);
+	}
 
-    public void add(CharSequence listItem) {
-        dataList.add(listItem);
-        notifyDataChangedEvent();
-    }
+	public void add(CharSequence listItem) {
+		dataList.add(listItem);
+		notifyDataChangedEvent();
+	}
 
-    public void remove(CharSequence listItem) {
-        dataList.remove(listItem);
-        notifyDataChangedEvent();
-    }
+	public void remove(CharSequence listItem) {
+		dataList.remove(listItem);
+		notifyDataChangedEvent();
+	}
 
-    public void setList(Collection newList) {
-        dataList.clear();
-        dataList.addAll(newList);
-        notifyDataChangedEvent();
-    }
+	public void setList(Collection<CharSequence> newList) {
+		dataList.clear();
+		dataList.addAll(newList);
+		notifyDataChangedEvent();
+	}
 
-    public Collection getList() {
-        return dataList;
-    }
+	public Collection<CharSequence> getList() {
+		return dataList;
+	}
 
 	public void replaceItem(int pos, CharSequence newItem) {
+		dataList.remove(pos);
 		dataList.add(pos, newItem);
+		notifyDataChangedEvent();
 	}
-	
-    public boolean hasTitle() {
-        return !listLabel.isEmpty();
-    }
 
-    public String getTitle() {
-        return listLabel;
-    }
+	@Override
+	public boolean hasTitle() {
+		return !(listLabel != null && !listLabel.equals(""));
+	}
 
-    public void setTitle(String title) {
-        listLabel = title;
-    }
+	@Override
+	public String getTitle() {
+		return listLabel;
+	}
+
+	@Override
+	public void setTitle(String title) {
+		listLabel = title;
+	}
 }
