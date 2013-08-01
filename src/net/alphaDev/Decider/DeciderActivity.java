@@ -7,12 +7,20 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import java.util.ArrayList;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
+import net.alphaDev.Decider.Fragments.AboutFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
 import net.alphaDev.Decider.Fragments.LoadListFragment;
 import net.alphaDev.Decider.Model.Item;
@@ -25,22 +33,42 @@ import net.alphaDev.Decider.Util.UriBuilder;
  */
 public class DeciderActivity
 		extends ListActivity
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        ListView.OnItemLongClickListener,
+        AbsListView.MultiChoiceModeListener {
 
 	// Datasources (flagged static for synchronized access)
 	private DecideListAdapter mAdapter;
+	private ActionMode mActionMode;
+	private ArrayList<Long> mSelection;
 
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
-		// Load UI layout from XML
 		setContentView(R.layout.main);
-
-		mAdapter = new DecideListAdapter(this, Item.Columns.LABEL);
-		setListAdapter(mAdapter);
+		setListAdapter(mAdapter = new DecideListAdapter(this));
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setOnItemLongClickListener(this);
 	}
 
+	private void decideAction() {
+		String randomItem = getRandomItemLabel(mAdapter);
+		Toast.makeText(this, randomItem, Toast.LENGTH_SHORT);
+	}
+
+	private String getRandomItemLabel(ListAdapter adapter) {
+		int chosen = pickNumberLowerThan(adapter.getCount());
+		Object item = adapter.getItem(chosen);
+		if(item != null)
+		return item.toString();
+		return null;
+	}
+
+	private int pickNumberLowerThan(int max) {
+		return (int) (Math.floor(Math.random() * max));
+	}
+
+	
 	// Provide OptionsMenu from XML
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,7 +80,9 @@ public class DeciderActivity
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem editItem = menu.findItem(R.id.edit_btn);
-		editItem.setEnabled(mAdapter.getCount() > 0);
+		if(editItem != null) {
+		    editItem.setEnabled(mAdapter.getCount() > 0);
+		}
 
 		MenuItem saveItem = menu.findItem(R.id.save_btn);
 		saveItem.setEnabled(mAdapter.getCount() > 0);
@@ -74,6 +104,12 @@ public class DeciderActivity
 			case R.id.load_btn:
 			    fragment = new LoadListFragment(this);
 				break;
+			case R.id.about_btn:
+			    fragment = new AboutFragment();
+				break;
+			case R.id.decide_btn:
+			    decideAction();
+				break;
 		}
 
 		if(fragment != null) {
@@ -84,8 +120,15 @@ public class DeciderActivity
 		return super.onOptionsItemSelected(item);
 	}
 
-	private int pickNumberLowerThan(int max) {
-		return (int) (Math.floor(Math.random() * max));
+	public boolean onItemLongClick(AdapterView<?> p1, View view, int p3, long p4) {
+		if(mActionMode != null) {
+			return false;
+		}
+
+		// Start the CAB using the ActionMode.Callback defined above
+		mActionMode = startActionMode(this);
+		view.setSelected(true);
+		return true;
 	}
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
@@ -106,5 +149,32 @@ public class DeciderActivity
 
 	public void onLoaderReset(Loader<Cursor> p1) {
 		mAdapter.swapCursor(null);
+	}
+
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		MenuInflater inflater = mode.getMenuInflater();
+		inflater.inflate(R.menu.item_menu, menu);
+		return true;
+	}
+
+	public boolean onPrepareActionMode(ActionMode p1, Menu p2) {
+		mSelection = new ArrayList<Long>();
+		return true;
+	}
+
+	public boolean onActionItemClicked(ActionMode p1, MenuItem p2) {
+		// TODO: Implement this method
+		return false;
+	}
+
+	public void onDestroyActionMode(ActionMode p1) {
+		mSelection = null;
+		mActionMode = null;
+	}
+
+	public void onItemCheckedStateChanged(ActionMode p1, int p2, long p3, boolean p4) {
+	    if(mActionMode != null) {
+			mActionMode.invalidate();
+		}
 	}
 }

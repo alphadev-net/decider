@@ -7,13 +7,13 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
+import net.alphaDev.Decider.Adapter.LoadListAdapter;
 import net.alphaDev.Decider.DeciderActivity;
 import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
@@ -25,7 +25,7 @@ public class LoadListFragment
         ListView.OnItemClickListener {
 
 	private DeciderActivity mContext;
-	private DecideListAdapter mAdapter;
+	private LoadListAdapter mAdapter;
 	private LoaderManager loaderManager;
 
     public LoadListFragment(DeciderActivity ctx) {
@@ -36,7 +36,7 @@ public class LoadListFragment
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		ListView view = new ListView(mContext);
-		view.setAdapter(mAdapter =  new DecideListAdapter(mContext, List.Columns.LABEL));
+		view.setAdapter(mAdapter =  new LoadListAdapter(mContext));
 		view.setOnItemClickListener(this);
 		loaderManager.initLoader(-1, Bundle.EMPTY, this);
 		return new AlertDialog.Builder(mContext)

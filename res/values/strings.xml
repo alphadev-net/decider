@@ -17,6 +17,7 @@
     <string name="decide_btn">Decide!</string>
     <string name="add_btn">Add</string>
     <string name="edit_btn">Edit item</string>
+	<string name="delete_btn">Delete item</string>
     <string name="save_btn">Save list</string>
     <string name="load_btn">Load list</string>
     <string name="clear_btn">Clear list</string>
