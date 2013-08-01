@@ -24,10 +24,6 @@
     </style>
     <style name="wrapfill.about">
     </style>
-    <style name="wrapfill.about.Click">
-        <item name="android:clickable">true</item>
-        <item name="android:onClick">aboutHandler</item>
-    </style>
     <style name="mainLayout" parent="filling">
         <item name="android:orientation">vertical</item>
     </style>

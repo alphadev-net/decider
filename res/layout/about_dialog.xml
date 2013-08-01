@@ -15,26 +15,18 @@
         <TextView
             android:id="@+id/about_mail"
             android:text="@+string/about_mail"
-            style="@style/wrapfill.about.Click" />
+            style="@style/wrapfill.about" />
         <TextView
             android:id="@+id/about_http"
             android:text="@+string/about_http"
-            style="@style/wrapfill.about.Click" />
+            style="@style/wrapfill.about" />
         <View 
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="@drawable/separator" />
         <TextView
             android:id="@+id/about_icon_link"
-            style="@style/wrapfill.about.Click"
+            style="@style/wrapfill.about"
             android:text="App Icon: wpclipart.com\n(Public Domain)" />
-        <TextView
-            android:id="@+id/about_wheel_link"
-            style="@style/wrapfill.about.Click"
-            android:text="Wheel: android-wheel\n(Apache 2.0)" />
-        <TextView
-            android:id="@+id/about_sherlock_link"
-            style="@style/wrapfill.about.Click"
-            android:text="ActionBar: ActionBarSherlock\n(Apache 2.0)" />
     </LinearLayout>
 </LinearLayout>

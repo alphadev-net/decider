@@ -1,7 +1,5 @@
 package net.alphaDev.Decider.Actions;
 
-import kankan.wheel.widget.WheelView;
-import net.alphaDev.Decider.DecideListAdapter;
 import net.alphaDev.Decider.R;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,13 +7,6 @@ import android.widget.TextView;
 
 public class EditItemAction
 		implements DialogInterface.OnClickListener {
-
-	private final WheelView mWheel;
-
-	public EditItemAction(WheelView mWheel) {
-		this.mWheel = mWheel;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
