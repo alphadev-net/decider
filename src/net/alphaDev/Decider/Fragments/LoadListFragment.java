@@ -1,44 +1,58 @@
 package net.alphaDev.Decider.Fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.DeciderActivity;
 import net.alphaDev.Decider.Model.List;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ListView;
+import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.UriBuilder;
 
 public class LoadListFragment
         extends DialogFragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        ListView.OnItemClickListener {
 
 	private DeciderActivity mContext;
 	private DecideListAdapter mAdapter;
+	private LoaderManager loaderManager;
 
     public LoadListFragment(DeciderActivity ctx) {
 		mContext = ctx;
+		loaderManager = ctx.getLoaderManager();
+	}
+	
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		ListView view = new ListView(mContext);
+		view.setAdapter(mAdapter =  new DecideListAdapter(mContext, List.Columns.LABEL));
+		view.setOnItemClickListener(this);
+		loaderManager.initLoader(-1, Bundle.EMPTY, this);
+		return new AlertDialog.Builder(mContext)
+		.setTitle(R.string.load_title_dialog_message)
+		.setView(view)
+		.setCancelable(true)
+		.setNegativeButton(R.string.cancel, new DialogCancelledAction())
+		.create();
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle icicle) {
-		return new ListView(mContext);
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle icicle) {
-		super.onViewCreated(view, icicle);
-		ListView list = (ListView) view;
-		list.setAdapter(mAdapter =  new DecideListAdapter(mContext, List.Columns.LABEL));
-
-		final LoaderManager manager = mContext.getLoaderManager();
-		manager.initLoader(-1, Bundle.EMPTY, this);
+	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+		Bundle bundle = new Bundle(1);
+		bundle.putLong("list", p4);
+		loaderManager.initLoader(p3, bundle, mContext);
+		dismissAllowingStateLoss();
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {

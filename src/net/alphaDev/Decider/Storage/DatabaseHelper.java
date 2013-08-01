@@ -1,35 +1,26 @@
 package net.alphaDev.Decider.Storage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-import android.provider.BaseColumns;
-import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.Model.Item;
+import net.alphaDev.Decider.Model.List;
 
 /**
  * 
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DeciderSQLiteOpenHelper
+public class DatabaseHelper
 		extends SQLiteOpenHelper {
 
 	// Set up constants used throughout class
 	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "decider.db";
 
-	public DeciderSQLiteOpenHelper(Context context) {
+	public DatabaseHelper(Context context) {
 		// Let the OS handle the Database stuff
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -38,23 +29,30 @@ public class DeciderSQLiteOpenHelper
 	public void onCreate(SQLiteDatabase mDB) {
 		Log.w("Decider", "Creating database tables");
 		// Setup tables on first DB usage;
-		String sql = "CREATE TABLE " + List.TABLE + " ("
-		           + List.Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				   + List.Columns.LABEL + " TEXT)";
-		mDB.execSQL(sql);
-
-		sql = "CREATE TABLE " + Item.TABLE + " ("
-		           + Item.Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				   + Item.Columns.LABEL + " INTEGER, "
-				   + Item.Columns.ITEM + " TEXT)";
-		mDB.execSQL(sql);
+		createV2List(mDB);
+		createV2Item(mDB);
 		populateDB(mDB);
+	}
+
+	private void createV2Item(SQLiteDatabase mDB) throws SQLException {
+		String sql = "CREATE TABLE " + Item.TABLE + " ("
+			+ Item.Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ Item.Columns.LIST + " INTEGER, "
+			+ Item.Columns.LABEL + " TEXT)";
+		mDB.execSQL(sql);
+	}
+
+	private void createV2List(SQLiteDatabase mDB) throws SQLException {
+		String sql = "CREATE TABLE " + List.TABLE + " ("
+			+ List.Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ List.Columns.LABEL + " TEXT)";
+		mDB.execSQL(sql);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if(oldVersion == 1 & newVersion == 2) {
-			db.execSQL("ALTER TABLE ");
+		//	db.execSQL("ALTER TABLE ");
 		}
 
 		// Perform database changes after app update
@@ -91,8 +89,8 @@ public class DeciderSQLiteOpenHelper
 
 	private void writeItemsEntry(SQLiteDatabase mDB, int parent, String label) {
 		ContentValues entrieValues = new ContentValues(2);
-		entrieValues.put(Item.Columns.LABEL, parent);
-		entrieValues.put(Item.Columns.ITEM, label);
+		entrieValues.put(Item.Columns.LIST, parent);
+		entrieValues.put(Item.Columns.LABEL, label);
 		mDB.insert(Item.TABLE, null, entrieValues);
 	}
 }

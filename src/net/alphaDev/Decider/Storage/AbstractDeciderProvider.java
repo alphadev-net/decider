@@ -21,7 +21,7 @@ public abstract class AbstractDeciderProvider
       extends ContentProvider {
 
 	protected static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);	
-	private DeciderSQLiteOpenHelper database;
+	private DatabaseHelper database;
 
 	public abstract String getAuthority();
 	protected abstract String getTableName();
@@ -127,9 +127,10 @@ public abstract class AbstractDeciderProvider
 		}
 		return deleteCount;
 	}
+
    @Override
    public boolean onCreate() {
-	   database = new DeciderSQLiteOpenHelper(getContext());
+	   database = new DatabaseHelper(getContext());
 	   return true;
    }
 

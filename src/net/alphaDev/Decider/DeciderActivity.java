@@ -9,7 +9,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +17,7 @@ import net.alphaDev.Decider.Fragments.ItemFragment;
 import net.alphaDev.Decider.Fragments.LoadListFragment;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.UriBuilder;
 
 /**
  * 
@@ -67,7 +67,6 @@ public class DeciderActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		DialogFragment fragment = null;
 
-		Log.d("asdf", "123");
 		switch(item.getItemId()) {
 			case R.id.add_btn:
 			    fragment = new ItemFragment();
@@ -80,7 +79,6 @@ public class DeciderActivity
 		if(fragment != null) {
 			final FragmentManager manager = getFragmentManager();
 			fragment.show(manager, "dialog");
-			Log.d("asdf", "def");
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -92,8 +90,12 @@ public class DeciderActivity
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		CursorLoader loader = new CursorLoader(this);
-		final Uri listId = bundle.getParcelable("asdf");
-		loader.setUri(listId);
+		final long listId = bundle.getLong("list");
+		loader.setUri(UriBuilder.getItemUri());
+		loader.setSelection(Item.Columns.LIST + " = ?");
+		loader.setSelectionArgs(new String[]{
+			Long.toString(listId)
+		});
 		loader.setProjection(Item.DEFAULT_PROJECTION);
 		return loader;
 	}

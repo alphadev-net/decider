@@ -8,7 +8,7 @@ import net.alphaDev.Decider.R;
 public class DeciderListProvider
         extends AbstractDeciderProvider {
 
-	public static final String AUTHORITY = "net.alphaDev.Decider.DeciderListProvider";
+	public static final String AUTHORITY = "net.alphaDev.Decider.Storage.DeciderListProvider";
 
 	static {
 		sURIMatcher.addURI(AUTHORITY, "list", R.id.PROVIDER_LIST);
