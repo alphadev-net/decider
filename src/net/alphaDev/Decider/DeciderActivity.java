@@ -9,6 +9,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,7 @@ public class DeciderActivity
 		// Load UI layout from XML
 		setContentView(R.layout.main);
 
-		mAdapter = new DecideListAdapter(null);
+		mAdapter = new DecideListAdapter(this, Item.Columns.LABEL);
 		setListAdapter(mAdapter);
 	}
 
@@ -63,9 +64,10 @@ public class DeciderActivity
 	}
 
 	@Override
-	public boolean onOptionsItemSelectes(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		DialogFragment fragment = null;
 
+		Log.d("asdf", "123");
 		switch(item.getItemId()) {
 			case R.id.add_btn:
 			    fragment = new ItemFragment();
@@ -78,6 +80,7 @@ public class DeciderActivity
 		if(fragment != null) {
 			final FragmentManager manager = getFragmentManager();
 			fragment.show(manager, "dialog");
+			Log.d("asdf", "def");
 		}
 
 		return super.onOptionsItemSelected(item);

@@ -12,6 +12,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+		<provider
+            android:name="net.alphaDev.Decider.Storage.DeciderListProvider"
+            android:authorities="net.alphaDev.Decider.Storage.DeciderListProvider"
+            android:exported="false" />
+		<provider
+            android:name="net.alphaDev.Decider.Storage.DeciderItemProvider"
+            android:authorities="net.alphaDev.Decider.Storage.DeciderItemProvider"
+            android:exported="false" />
     </application>
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18"/>
 </manifest>
