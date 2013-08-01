@@ -3,7 +3,6 @@ package net.alphaDev.Decider.Storage;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.alphaDev.Decider.DecideListAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

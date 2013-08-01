@@ -1,5 +1,7 @@
 package net.alphaDev.Decider.Fragments;
 
-public class ItemFragment
+import android.app.DialogFragment;
+
+public class ItemFragment extends DialogFragment 
 {
 }

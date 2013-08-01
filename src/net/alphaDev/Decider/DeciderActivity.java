@@ -1,17 +1,20 @@
 package net.alphaDev.Decider;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.Toast;
+import net.alphaDev.Decider.Adapter.DecideListAdapter;
+import net.alphaDev.Decider.Fragments.ItemFragment;
+import net.alphaDev.Decider.Fragments.LoadListFragment;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
 
@@ -22,13 +25,6 @@ import net.alphaDev.Decider.R;
 public class DeciderActivity
 		extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	// Setup DialogIDs
-	public static final int DIALOG_ABOUT_ID = 0;
-	public static final int DIALOG_SAVE_ID = 1;
-	public static final int DIALOG_LOAD_ID = 2;
-	public static final int DIALOG_ADD_ID = 4;
-	public static final int DIALOG_EDIT_ID = 8;
 
 	// Datasources (flagged static for synchronized access)
 	private DecideListAdapter mAdapter;
@@ -42,9 +38,6 @@ public class DeciderActivity
 
 		mAdapter = new DecideListAdapter(null);
 		setListAdapter(mAdapter);
-
-		final LoaderManager manager = getLoaderManager();
-		manager.initLoader(0, Bundle.EMPTY, this);
 	}
 
 	// Provide OptionsMenu from XML
@@ -69,13 +62,35 @@ public class DeciderActivity
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+	@Override
+	public boolean onOptionsItemSelectes(MenuItem item) {
+		DialogFragment fragment = null;
+
+		switch(item.getItemId()) {
+			case R.id.add_btn:
+			    fragment = new ItemFragment();
+				break;
+			case R.id.load_btn:
+			    fragment = new LoadListFragment(this);
+				break;
+		}
+
+		if(fragment != null) {
+			final FragmentManager manager = getFragmentManager();
+			fragment.show(manager, "dialog");
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
 	private int pickNumberLowerThan(int max) {
 		return (int) (Math.floor(Math.random() * max));
 	}
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		CursorLoader loader = new CursorLoader(this);
-		loader.setUri(null);
+		final Uri listId = bundle.getParcelable("asdf");
+		loader.setUri(listId);
 		loader.setProjection(Item.DEFAULT_PROJECTION);
 		return loader;
 	}
