@@ -13,11 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Fragments.AboutFragment;
@@ -35,9 +32,8 @@ public class DeciderActivity
 		extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         ListView.OnItemLongClickListener,
-        AbsListView.MultiChoiceModeListener {
+        ListView.MultiChoiceModeListener {
 
-	// Datasources (flagged static for synchronized access)
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
 
@@ -50,7 +46,6 @@ public class DeciderActivity
 		getListView().setOnItemLongClickListener(this);
 	}
 
-	// Provide OptionsMenu from XML
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		final MenuInflater inflater = getMenuInflater();
@@ -60,16 +55,13 @@ public class DeciderActivity
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem editItem = menu.findItem(R.id.edit_btn);
-		if(editItem != null) {
-		    editItem.setEnabled(mAdapter.getCount() > 0);
-		}
+		boolean hasItems = mAdapter.getCount() > 0;
 
 		MenuItem saveItem = menu.findItem(R.id.save_btn);
-		saveItem.setEnabled(mAdapter.getCount() > 0);
+		saveItem.setEnabled(hasItems);
 
 		MenuItem clearItem = menu.findItem(R.id.clear_btn);
-		clearItem.setEnabled(mAdapter.getCount() > 0);
+		clearItem.setEnabled(hasItems);
 
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -94,8 +86,7 @@ public class DeciderActivity
 		}
 
 		if(fragment != null) {
-			final FragmentManager manager = getFragmentManager();
-			fragment.show(manager, "dialog");
+			fragment.show(getFragmentManager(), "dialog");
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -108,7 +99,7 @@ public class DeciderActivity
 
 		// Start the CAB using the ActionMode.Callback defined above
 		mActionMode = startActionMode(this);
-		view.setSelected(true);
+		//view.setSelected(true);
 		return true;
 	}
 
