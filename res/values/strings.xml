@@ -29,4 +29,5 @@
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="maybe">Maybe</string>
+    <string name="icon_credits">App Icon: wpclipart.com\n(Public Domain)</string>
 </resources>
