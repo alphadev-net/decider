@@ -29,15 +29,15 @@ public class DecideListAdapter
         resetEntries();
 	}
 
-    private void addEntry(String label) {
+    public void addEntry(CharSequence label) {
         InnerItem item = new InnerItem();
-        item.label = label;
+        item.label = label.toString();
         mEntries.add(item);
         notifyDataSetChanged();
         isAltered = true;
     }
 
-    private void resetEntries() {
+    public void resetEntries() {
         mEntries = new ArrayList<InnerItem>();
         notifyDataSetChanged();
         isAltered = false;
@@ -45,12 +45,12 @@ public class DecideListAdapter
 
 
     public void swapCursor(Cursor cursor) {
+        resetEntries();
         if(cursor == null) {
             return;
         }
 
         if(cursor.moveToFirst()) {
-            resetEntries();
             int idIndex = cursor.getColumnIndex(Item.Columns._ID);
             int labelIndex = cursor.getColumnIndex(Item.Columns.LABEL);
             do {
@@ -82,15 +82,17 @@ public class DecideListAdapter
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null) {
+        View convertView = view;
+
+        if(convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.simple_selectable_list_item, viewGroup);
+            convertView = inflater.inflate(R.layout.simple_selectable_list_item, viewGroup, false);
         }
 
-        TextView textView = (TextView) view.findViewById(R.id.text1);
+        TextView textView = (TextView) convertView.findViewById(R.id.text1);
         textView.setText(mEntries.get(i).label);
 
-        return view;
+        return convertView;
     }
 
     private class InnerItem {

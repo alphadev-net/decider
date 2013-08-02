@@ -72,7 +72,7 @@ public class DeciderActivity
 
 		switch(item.getItemId()) {
 			case R.id.add_btn:
-			    fragment = new ItemFragment();
+			    fragment = new ItemFragment(this);
 				break;
 			case R.id.load_btn:
 			    fragment = new LoadListFragment(this);
@@ -80,6 +80,9 @@ public class DeciderActivity
 			case R.id.about_btn:
 			    fragment = new AboutFragment();
 				break;
+            case R.id.clear_btn:
+                mAdapter.resetEntries();
+                break;
 			case R.id.decide_btn:
 			    //fragment = new DecideFragment();
 				break;
