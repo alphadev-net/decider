@@ -50,23 +50,6 @@ public class DeciderActivity
 		getListView().setOnItemLongClickListener(this);
 	}
 
-	private void decideAction() {
-		String randomItem = getRandomItemLabel(mAdapter);
-		Toast.makeText(this, randomItem, Toast.LENGTH_SHORT);
-	}
-
-	private String getRandomItemLabel(ListAdapter adapter) {
-		int chosen = pickNumberLowerThan(adapter.getCount());
-		Object item = adapter.getItem(chosen);
-		if(item != null)
-		return item.toString();
-		return null;
-	}
-
-	private int pickNumberLowerThan(int max) {
-		return (int) (Math.floor(Math.random() * max));
-	}
-
 	// Provide OptionsMenu from XML
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,7 +89,7 @@ public class DeciderActivity
 			    fragment = new AboutFragment();
 				break;
 			case R.id.decide_btn:
-			    decideAction();
+			    //fragment = new DecideFragment();
 				break;
 		}
 
@@ -160,7 +143,6 @@ public class DeciderActivity
 	}
 
 	public boolean onActionItemClicked(ActionMode p1, MenuItem p2) {
-		// TODO: Implement this method
 		return false;
 	}
 
