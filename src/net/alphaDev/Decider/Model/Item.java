@@ -2,6 +2,10 @@ package net.alphaDev.Decider.Model;
 
 import android.provider.BaseColumns;
 
+/**
+ *
+ * @author Jan Seeger <jan@alphadev.net>
+ */
 public class Item {
 	public static final String TABLE = "entries";
 

@@ -19,6 +19,10 @@ import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.UriBuilder;
 
+/**
+ *
+ * @author Jan Seeger <jan@alphadev.net>
+ */
 public class LoadListFragment
         extends DialogFragment
         implements LoaderManager.LoaderCallbacks<Cursor>,

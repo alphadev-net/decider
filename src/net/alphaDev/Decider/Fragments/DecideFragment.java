@@ -5,6 +5,10 @@ import android.content.Context;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
+/**
+ *
+ * @author Jan Seeger <jan@alphadev.net>
+ */
 public class DecideFragment
         extends Fragment {
 

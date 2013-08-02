@@ -5,6 +5,10 @@ import android.net.Uri;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
 
+/**
+ *
+ * @author Jan Seeger <jan@alphadev.net>
+ */
 public class DeciderItemProvider
         extends AbstractDeciderProvider {
 

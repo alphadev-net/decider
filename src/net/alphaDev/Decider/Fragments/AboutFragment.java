@@ -16,6 +16,10 @@ import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.R;
 import android.view.View.OnClickListener;
 
+/**
+ *
+ * @author Jan Seeger <jan@alphadev.net>
+ */
 public class AboutFragment
         extends DialogFragment {
 
