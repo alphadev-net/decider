@@ -1,7 +1,6 @@
 package net.alphaDev.Decider.Adapter;
 
 import android.content.Context;
-import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.Model.List;
 
 /**

@@ -18,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import java.util.ArrayList;
+
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Fragments.AboutFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
@@ -40,7 +40,6 @@ public class DeciderActivity
 	// Datasources (flagged static for synchronized access)
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
-	private ArrayList<Long> mSelection;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -68,7 +67,6 @@ public class DeciderActivity
 		return (int) (Math.floor(Math.random() * max));
 	}
 
-	
 	// Provide OptionsMenu from XML
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,8 +156,7 @@ public class DeciderActivity
 	}
 
 	public boolean onPrepareActionMode(ActionMode p1, Menu p2) {
-		mSelection = new ArrayList<Long>();
-		return true;
+		return false;
 	}
 
 	public boolean onActionItemClicked(ActionMode p1, MenuItem p2) {
@@ -168,13 +165,9 @@ public class DeciderActivity
 	}
 
 	public void onDestroyActionMode(ActionMode p1) {
-		mSelection = null;
 		mActionMode = null;
 	}
 
 	public void onItemCheckedStateChanged(ActionMode p1, int p2, long p3, boolean p4) {
-	    if(mActionMode != null) {
-			mActionMode.invalidate();
-		}
 	}
 }

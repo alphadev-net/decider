@@ -14,10 +14,11 @@ import android.R;
 public abstract class AbstractDecideListAdapter
         extends SimpleCursorAdapter {
 
-	private static final int layout = R.layout.simple_list_item_1;
-	private static final int[] to = new int[]{ R.id.text1};
+	private static final int layout = R.layout.simple_list_item_activated_1;
+	private static final int[] to = {R.id.text1};
 
 	public AbstractDecideListAdapter(Context context, String... from) {
 		super(context, layout, null, from, to);
 	}
 }
+
