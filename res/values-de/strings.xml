@@ -23,4 +23,8 @@
     <string name="about_btn">Über</string>
 
     <string name="cancel">Abbrechen</string>
+
+	<string name="yes">Ja</string>
+	<string name="no">Nein</string>
+	<string name="maybe">Vielleicht</string>
 </resources>

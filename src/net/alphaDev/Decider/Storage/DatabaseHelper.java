@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.Model.List;
+import net.alphaDev.Decider.R;
 
 /**
  * 
@@ -20,9 +21,12 @@ public class DatabaseHelper
 	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "decider.db";
 
+	private Context mContext;
+
 	public DatabaseHelper(Context context) {
 		// Let the OS handle the Database stuff
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		mContext = context;
 	}
 
 	@Override
@@ -64,21 +68,25 @@ public class DatabaseHelper
 
 	private void populateDB(SQLiteDatabase mDB) {
 		mDB.beginTransaction();
-		int last = (int) writeListEntry(mDB, "Yes / No");
-		writeItemsEntry(mDB, last, "Yes");
-		writeItemsEntry(mDB, last, "No");
-		last = (int) writeListEntry(mDB, "Yes / No / Maybe");
-		writeItemsEntry(mDB, last, "Yes");
-		writeItemsEntry(mDB, last, "No");
-		writeItemsEntry(mDB, last, "Maybe");
-		last = (int) writeListEntry(mDB, "A / B / C / D / E");
-		writeItemsEntry(mDB, last, "A");
-		writeItemsEntry(mDB, last, "B");
-		writeItemsEntry(mDB, last, "C");
-		writeItemsEntry(mDB, last, "D");
-		writeItemsEntry(mDB, last, "E");
+		writeArray(mDB, R.array.yn);
+		writeArray(mDB, R.array.ynm);
+		writeArray(mDB, R.array.abcde);
 		mDB.setTransactionSuccessful();
 		mDB.endTransaction();
+	}
+
+	private void writeArray(SQLiteDatabase mDB, int array) {
+		StringBuilder sb = new StringBuilder();
+		String[] items = mContext.getResources().getStringArray(array);
+		for(String item: items) {
+			sb.append(" / ");
+			sb.append(item);
+		}
+		String label = sb.substring(3);
+		long last = writeListEntry(mDB, label);
+		for(String item: items) {
+			writeItemsEntry(mDB, last, item);
+		}
 	}
 
 	private long writeListEntry(SQLiteDatabase mDB, String label) {
@@ -87,7 +95,7 @@ public class DatabaseHelper
 		return mDB.insert(List.TABLE, null, labelValues);
 	}
 
-	private void writeItemsEntry(SQLiteDatabase mDB, int parent, String label) {
+	private void writeItemsEntry(SQLiteDatabase mDB, long parent, String label) {
 		ContentValues entrieValues = new ContentValues(2);
 		entrieValues.put(Item.Columns.LIST, parent);
 		entrieValues.put(Item.Columns.LABEL, label);
