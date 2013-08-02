@@ -32,7 +32,7 @@ public class DeciderActivity
 		extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         ListView.OnItemLongClickListener,
-        ListView.MultiChoiceModeListener {
+		ActionMode.Callback {
 
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
@@ -42,7 +42,7 @@ public class DeciderActivity
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
 		setListAdapter(mAdapter = new DecideListAdapter(this));
-		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		//getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setOnItemLongClickListener(this);
 	}
 
@@ -56,14 +56,14 @@ public class DeciderActivity
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean hasItems = mAdapter.getCount() > 0;
-
-		MenuItem saveItem = menu.findItem(R.id.save_btn);
-		saveItem.setEnabled(hasItems);
-
-		MenuItem clearItem = menu.findItem(R.id.clear_btn);
-		clearItem.setEnabled(hasItems);
-
+		validateMenuItem(menu, R.id.save_btn, hasItems);
+		validateMenuItem(menu, R.id.clear_btn, hasItems);
 		return super.onPrepareOptionsMenu(menu);
+	}
+
+	private void validateMenuItem(Menu menu, int itemRes, boolean enabled) {
+		MenuItem item = menu.findItem(itemRes);
+		item.setEnabled(enabled);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class DeciderActivity
 
 		// Start the CAB using the ActionMode.Callback defined above
 		mActionMode = startActionMode(this);
-		//view.setSelected(true);
+		view.setSelected(true);
 		return true;
 	}
 
@@ -139,8 +139,5 @@ public class DeciderActivity
 
 	public void onDestroyActionMode(ActionMode p1) {
 		mActionMode = null;
-	}
-
-	public void onItemCheckedStateChanged(ActionMode p1, int p2, long p3, boolean p4) {
 	}
 }
