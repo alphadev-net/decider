@@ -1,3 +1,4 @@
+/out/
 /bin/
 /gen/
 /nbandroid/
@@ -15,3 +16,4 @@ local.properties
 lib/actionbarsherlock/gen/com/actionbarsherlock/R.java
 lib/actionbarsherlock/gen/com/actionbarsherlock/BuildConfig.java
 lib/actionbarsherlock/gen/R.java.d
+/.idea/
