@@ -15,7 +15,7 @@
 
     <string name="empty_save">You shouldn\'t be saving empty lists!</string>
     <string name="decide_btn">Decide!</string>
-    <string name="add_btn">Add</string>
+    <string name="add_btn">Add item</string>
     <string name="edit_btn">Edit item</string>
 	<string name="delete_btn">Delete item</string>
     <string name="save_btn">Save list</string>
@@ -23,6 +23,7 @@
     <string name="clear_btn">Clear list</string>
     <string name="about_btn">About</string>
 
+	<string name="close">Close</string>
     <string name="cancel">Cancel</string>
 
 	<string name="yes">Yes</string>

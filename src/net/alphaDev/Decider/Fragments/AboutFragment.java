@@ -29,7 +29,7 @@ public class AboutFragment
 		dialog.setTitle(R.string.about_title);
 		dialog.setView(view);
 		dialog.setCancelable(true);
-		dialog.setNegativeButton(R.string.about_btn, new DialogCancelledAction());
+		dialog.setNegativeButton(R.string.close, new DialogCancelledAction());
 		return dialog.create();
 	}
 

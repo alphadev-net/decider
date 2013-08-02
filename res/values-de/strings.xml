@@ -15,6 +15,7 @@
 
     <string name="empty_save">Du willst eine leere Liste speichern!</string>
     <string name="decide_btn">Entscheide!</string>
+	<string name="delete_btn">Eintrag entfernen</string>
     <string name="edit_btn">Eintrag bearbeiten</string>
     <string name="add_btn">Hinzufügen</string>
     <string name="save_btn">Liste sichern</string>
@@ -22,6 +23,7 @@
     <string name="clear_btn">Liste leeren</string>
     <string name="about_btn">Über</string>
 
+	<string name="close">Schließen</string>
     <string name="cancel">Abbrechen</string>
 
 	<string name="yes">Ja</string>
