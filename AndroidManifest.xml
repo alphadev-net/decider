@@ -12,7 +12,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="DecideActivity"
+        <activity android:name=".DecideActivity"
                 android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
 		<provider
             android:name="net.alphaDev.Decider.Storage.DeciderListProvider"
