@@ -1,20 +1,16 @@
 package net.alphaDev.Decider.Fragments;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.TextView;
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.R;
-import android.view.View.OnClickListener;
 
 /**
  *
@@ -43,15 +39,10 @@ public class AboutFragment
 	    setHandlers(view);
 	}
 
-
 	private void setHandlers(View view) {
 		Intent httpHandler = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + getString(R.string.about_http)));
 		View http = view.findViewById(R.id.about_http);
 		http.setOnClickListener(getHandler(httpHandler));
-
-		Intent iconHandler = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.wpclipart.com/recreation/games/pool/eight_ball_large.png.html"));
-		View icon = view.findViewById(R.id.about_icon_link);
-		icon.setOnClickListener(getHandler(iconHandler));
 
 		String ver = getString(R.string.app_name) + " " + getString(R.string.app_version);
 		Intent mailHandler = new Intent(Intent.ACTION_SEND).setType("plain/text")
