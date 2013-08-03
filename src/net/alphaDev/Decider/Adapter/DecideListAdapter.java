@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class DecideListAdapter
 		extends BaseAdapter {
 
+    private long mListId = -1;
     private ArrayList<InnerItem> mEntries;
     private boolean isAltered = false;
     private Context mContext;
@@ -41,6 +42,27 @@ public class DecideListAdapter
         mEntries = new ArrayList<InnerItem>();
         notifyDataSetChanged();
         isAltered = false;
+    }
+
+    public void setSelected(int pos, boolean selected) {
+        mEntries.get(pos).selected = selected;
+        notifyDataSetChanged();
+    }
+
+    public boolean isSelected(int pos) {
+        return mEntries.get(pos).selected;
+    }
+
+    public void toggleSelection(int pos) {
+        boolean currentState = isSelected(pos);
+        setSelected(pos, !currentState);
+    }
+
+    public void resetSelection() {
+        for(InnerItem item: mEntries) {
+            item.selected = false;
+        }
+        notifyDataSetChanged();
     }
 
 

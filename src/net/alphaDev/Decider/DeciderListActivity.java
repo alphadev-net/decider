@@ -32,6 +32,7 @@ import net.alphaDev.Decider.Util.UriBuilder;
 public class DeciderListActivity
 		extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
+        ListView.OnItemClickListener,
         ListView.OnItemLongClickListener,
 		ActionMode.Callback {
 
@@ -43,8 +44,8 @@ public class DeciderListActivity
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
 		setListAdapter(mAdapter = new DecideListAdapter(this));
-		//getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setOnItemLongClickListener(this);
+
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class DeciderListActivity
 
 		// Start the CAB using the ActionMode.Callback defined above
 		mActionMode = startActionMode(this);
-		view.setSelected(true);
+		mAdapter.setSelected(p3, true);
 		return true;
 	}
 
@@ -141,4 +142,11 @@ public class DeciderListActivity
 	public void onDestroyActionMode(ActionMode p1) {
 		mActionMode = null;
 	}
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if(mActionMode != null) {
+            mAdapter.toggleSelection(i);
+        }
+    }
 }
