@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Fragments.AboutFragment;
+import net.alphaDev.Decider.Fragments.DecideFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
 import net.alphaDev.Decider.Fragments.LoadListFragment;
 import net.alphaDev.Decider.Fragments.SaveListFragment;
@@ -88,7 +89,7 @@ public class DeciderActivity
                 mAdapter.resetEntries();
                 break;
 			case R.id.decide_btn:
-			    //fragment = new DecideFragment();
+			    fragment = new DecideFragment();
 				break;
 		}
 
