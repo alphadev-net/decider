@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
@@ -32,7 +33,7 @@ public class SaveListFragment
     private DecideListAdapter mAdapter;
     private Context mContext;
     private TextView mText;
-    private long mId;
+    private long mId = -1;
     private CharSequence mListLabel;
 
     public SaveListFragment(DeciderActivity mContext) {
@@ -64,7 +65,17 @@ public class SaveListFragment
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-
+        CharSequence label = mText.getText();
+        if(label.length() == 0) {
+            Toast.makeText(mContext, R.string.empty_save, Toast.LENGTH_SHORT).show();
+        } else {
+            if(mListLabel != label || mId == -1) {
+                // TODO: implement fresh list saving
+            } else {
+                // TODO: implement list updating
+            }
+            dialogInterface.dismiss();
+        }
     }
 
     private static long findParentList(DecideListAdapter adapter) {
@@ -80,9 +91,10 @@ public class SaveListFragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        long parentList = bundle.getLong("data");
+        long parentList = bundle.getLong("list");
         final CursorLoader loader = new CursorLoader(mContext);
         loader.setUri(UriBuilder.getListUri(parentList));
+        loader.setProjection(List.DEFAULT_PROJECTION);
         return loader;
     }
 
@@ -94,7 +106,7 @@ public class SaveListFragment
             int labelIndex = cursor.getColumnIndex(List.Columns.LABEL);
             mId = cursor.getLong(idIndex);
             mListLabel = cursor.getString(labelIndex);
-            mText.setText(labelIndex);
+            mText.setText(mListLabel);
         }
     }
 
