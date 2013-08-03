@@ -45,7 +45,7 @@ public class DeciderListActivity
 		setContentView(R.layout.main);
 		setListAdapter(mAdapter = new DecideListAdapter(this));
 		getListView().setOnItemLongClickListener(this);
-
+        getListView().setOnItemClickListener(this);
 	}
 
 	@Override
@@ -89,8 +89,7 @@ public class DeciderListActivity
                 mAdapter.resetEntries();
                 break;
 			case R.id.decide_btn:
-                Intent intent = new Intent(this, DecideActivity.class);
-			    startActivity(intent);
+                triggerDecider();
 				break;
 		}
 
@@ -100,6 +99,12 @@ public class DeciderListActivity
 
 		return super.onOptionsItemSelected(item);
 	}
+
+    private void triggerDecider() {
+        Intent intent = new Intent(this, DecideActivity.class);
+        intent.putExtra("list", mAdapter.dumpItems());
+        startActivity(intent);
+    }
 
 	public boolean onItemLongClick(AdapterView<?> p1, View view, int p3, long p4) {
 		if(mActionMode != null) {

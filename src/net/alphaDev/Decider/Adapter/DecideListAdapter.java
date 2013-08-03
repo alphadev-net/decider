@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.Model.Item;
 
 import java.util.ArrayList;
@@ -65,6 +66,13 @@ public class DecideListAdapter
         notifyDataSetChanged();
     }
 
+    public CharSequence[] dumpItems() {
+        CharSequence[] items = new CharSequence[mEntries.size()];
+        for(int i=0; i<mEntries.size(); i++) {
+            items[i] = mEntries.get(i).label;
+        }
+        return items;
+    }
 
     public void swapCursor(Cursor cursor) {
         resetEntries();
@@ -85,6 +93,7 @@ public class DecideListAdapter
             } while(cursor.moveToNext());
         }
 
+        mListId = ItemController.findParentList(this);
         notifyDataSetChanged();
         isAltered = false;
     }

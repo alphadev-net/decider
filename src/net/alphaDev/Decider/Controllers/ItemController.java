@@ -3,6 +3,7 @@ package net.alphaDev.Decider.Controllers;
 import android.content.Context;
 import android.content.CursorLoader;
 
+import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.Util.UriBuilder;
 
@@ -19,5 +20,16 @@ public class ItemController {
         loader.setSelectionArgs(selection);
         loader.setProjection(Item.DEFAULT_PROJECTION);
         return loader;
+    }
+
+    public static long findParentList(DecideListAdapter adapter) {
+        long result = -1;
+        for(int i=0; i<adapter.getCount(); i++) {
+            DecideListAdapter.InnerItem item = (DecideListAdapter.InnerItem) adapter.getItem(i);
+            if(item.id != result) {
+                result = item.list;
+            }
+        }
+        return result;
     }
 }

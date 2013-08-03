@@ -15,24 +15,22 @@ import net.alphaDev.Decider.R;
 public class DecideActivity
         extends Activity {
 
-	private Context mContext;
+	private CharSequence[] mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.decider_dialog);
+        mItems = getIntent().getExtras().getCharSequenceArray("list");
     }
 
     private void decideAction() {
-		String randomItem = getRandomItemLabel(null/*adapter*/);
-		Toast.makeText(mContext, randomItem, Toast.LENGTH_SHORT);
+		CharSequence randomItem = getRandomItemLabel();
+		Toast.makeText(this, randomItem, Toast.LENGTH_SHORT);
 	}
 
-	private String getRandomItemLabel(ListAdapter adapter) {
-		int chosen = pickNumberLowerThan(adapter.getCount());
-		Object item = adapter.getItem(chosen);
-		if(item != null)
-			return item.toString();
-		return null;
+	private CharSequence getRandomItemLabel() {
+		int chosen = pickNumberLowerThan(mItems.length);
+		return mItems[chosen];
 	}
 
 	private int pickNumberLowerThan(int max) {
