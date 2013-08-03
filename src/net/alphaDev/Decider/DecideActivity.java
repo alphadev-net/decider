@@ -19,6 +19,7 @@ public class DecideActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
         setContentView(R.layout.decider_dialog);
         mItems = getIntent().getExtras().getCharSequenceArray("list");
     }
