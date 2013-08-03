@@ -1,53 +1,33 @@
 package net.alphaDev.Decider;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.alphaDev.Decider.Actions.ShakeAction;
+import net.alphaDev.Decider.Fragments.DecideFragment;
+import net.alphaDev.Decider.Fragments.DeciderListFragment;
 
 /**
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class DecideActivity
-        extends Activity
-        implements ShakeAction.OnShakeListener {
-
-	private CharSequence[] mItems;
-    private TextView resultView;
+        extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-        setContentView(R.layout.decider_dialog);
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        setContentView(R.layout.main);
 
-        final Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            mItems = extras.getCharSequenceArray("list");
+        if (icicle == null) {
+            Fragment mFragment = new DecideFragment();
+            mFragment.setRetainInstance(true);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(android.R.id.content, mFragment).commit();
         }
-
-        resultView = (TextView) findViewById(R.id.resultView);
-        decideAction();
-    }
-
-    private void decideAction() {
-		CharSequence randomItem = getRandomItemLabel();
-        resultView.setText(randomItem);
-	}
-
-	private CharSequence getRandomItemLabel() {
-		int chosen = pickNumberLowerThan(mItems.length);
-		return mItems[chosen];
-	}
-
-	private int pickNumberLowerThan(int max) {
-		return (int) (Math.floor(Math.random() * max));
-	}
-
-    @Override
-    public void shake() {
-        decideAction();
     }
 }
