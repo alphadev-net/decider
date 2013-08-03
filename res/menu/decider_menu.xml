@@ -4,7 +4,7 @@
           android:title="@string/decide_btn"
           android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/add_btn"
-          android:icon="@drawable/icon_add"
+          android:icon="@drawable/ic_menu_add"
           android:title="@string/add_btn"
           android:showAsAction="ifRoom" />
     <item android:id="@+id/clear_btn"
