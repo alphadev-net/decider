@@ -17,6 +17,7 @@ public class DecideActivity
 
 	private CharSequence[] mItems;
     private TextView resultView;
+	private ShakeAction mShakeTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,20 @@ public class DecideActivity
 
         resultView = (TextView) findViewById(R.id.resultView);
         decideAction();
+		mShakeTracker = new ShakeAction(this);
     }
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mShakeTracker.register();
+	}
+
+	@Override
+	protected void onPause() {
+		mShakeTracker.unregister();
+		super.onPause();
+	}
 
     private void decideAction() {
 		CharSequence randomItem = getRandomItemLabel();

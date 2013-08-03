@@ -40,6 +40,7 @@ public class DeciderListActivity
 
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
+	private ShakeAction mShakeTracker;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -48,6 +49,19 @@ public class DeciderListActivity
 		setListAdapter(mAdapter = new DecideListAdapter(this));
 		getListView().setOnItemLongClickListener(this);
         getListView().setOnItemClickListener(this);
+		mShakeTracker = new ShakeAction(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mShakeTracker.register();
+	}
+
+	@Override
+	protected void onPause() {
+		mShakeTracker.unregister();
+		super.onPause();
 	}
 
 	@Override
@@ -103,9 +117,11 @@ public class DeciderListActivity
 	}
 
     private void triggerDecider() {
-        Intent intent = new Intent(this, DecideActivity.class);
-        intent.putExtra("list", mAdapter.dumpItems());
-        startActivity(intent);
+		if (mAdapter.getCount() > 0) {
+			Intent intent = new Intent(this, DecideActivity.class);
+			intent.putExtra("list", mAdapter.dumpItems());
+			startActivity(intent);
+		}
     }
 
 	public boolean onItemLongClick(AdapterView<?> p1, View view, int p3, long p4) {
