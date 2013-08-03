@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import net.alphaDev.Decider.Actions.ShakeAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.Fragments.AboutFragment;
@@ -34,7 +35,8 @@ public class DeciderListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         ListView.OnItemClickListener,
         ListView.OnItemLongClickListener,
-		ActionMode.Callback {
+		ActionMode.Callback,
+        ShakeAction.OnShakeListener {
 
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
@@ -153,5 +155,10 @@ public class DeciderListActivity
         if(mActionMode != null) {
             mAdapter.toggleSelection(i);
         }
+    }
+
+    @Override
+    public void shake() {
+        triggerDecider();
     }
 }
