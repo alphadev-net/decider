@@ -1,12 +1,8 @@
-package net.alphaDev.Decider.Fragments;
+package net.alphaDev.Decider;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
@@ -16,14 +12,14 @@ import net.alphaDev.Decider.R;
  *
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DecideFragment
-        extends DialogFragment {
+public class DecideActivity
+        extends Activity {
 
 	private Context mContext;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.decider_dialog, container);
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.decider_dialog);
     }
 
     private void decideAction() {

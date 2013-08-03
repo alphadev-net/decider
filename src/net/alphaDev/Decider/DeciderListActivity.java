@@ -1,10 +1,10 @@
 package net.alphaDev.Decider;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,19 +19,17 @@ import android.widget.ListView;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.Fragments.AboutFragment;
-import net.alphaDev.Decider.Fragments.DecideFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
 import net.alphaDev.Decider.Fragments.LoadListFragment;
 import net.alphaDev.Decider.Fragments.SaveListFragment;
 import net.alphaDev.Decider.Model.Item;
-import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.UriBuilder;
 
 /**
  * 
  * @author Jan Seeger <jan@alphadev.net>
  */
-public class DeciderActivity
+public class DeciderListActivity
 		extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         ListView.OnItemLongClickListener,
@@ -90,7 +88,8 @@ public class DeciderActivity
                 mAdapter.resetEntries();
                 break;
 			case R.id.decide_btn:
-			    fragment = new DecideFragment();
+                Intent intent = new Intent(this, DecideActivity.class);
+			    startActivity(intent);
 				break;
 		}
 

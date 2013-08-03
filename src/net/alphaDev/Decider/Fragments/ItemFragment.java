@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
-import net.alphaDev.Decider.DeciderActivity;
+import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.R;
 
 /**
@@ -27,12 +27,12 @@ public class ItemFragment
     private DecideListAdapter mAdapter;
     private TextView mText;
 
-    public ItemFragment(DeciderActivity context) {
+    public ItemFragment(DeciderListActivity context) {
         mContext = context;
         mAdapter = (DecideListAdapter) context.getListAdapter();
     }
 
-    public ItemFragment(DeciderActivity context, long id) {
+    public ItemFragment(DeciderListActivity context, long id) {
         this(context);
         this.id = id;
     }

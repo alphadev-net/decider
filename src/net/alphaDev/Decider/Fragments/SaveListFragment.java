@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
-import net.alphaDev.Decider.DeciderActivity;
+import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.UriBuilder;
@@ -36,7 +36,7 @@ public class SaveListFragment
     private long mId = -1;
     private CharSequence mListLabel;
 
-    public SaveListFragment(DeciderActivity mContext) {
+    public SaveListFragment(DeciderListActivity mContext) {
         this.mContext = mContext;
         this.mAdapter = (DecideListAdapter) mContext.getListAdapter();
     }
