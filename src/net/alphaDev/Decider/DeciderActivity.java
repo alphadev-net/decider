@@ -1,313 +1,150 @@
 package net.alphaDev.Decider;
 
-import kankan.wheel.widget.WheelView;
-import kankan.wheel.widget.adapters.WheelViewAdapter;
-import net.alphaDev.Decider.Actions.AddAction;
-import net.alphaDev.Decider.Actions.DialogCancelledAction;
-import net.alphaDev.Decider.Actions.EditItemAction;
-import net.alphaDev.Decider.Actions.LoadListAction;
-import net.alphaDev.Decider.Actions.SaveListAction;
-import net.alphaDev.Decider.Storage.DeciderStorage;
-import net.alphaDev.Decider.Storage.DeciderStorageFactory;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Intent;
-import android.net.Uri;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import net.alphaDev.Decider.Adapter.DecideListAdapter;
+import net.alphaDev.Decider.Fragments.AboutFragment;
+import net.alphaDev.Decider.Fragments.ItemFragment;
+import net.alphaDev.Decider.Fragments.LoadListFragment;
+import net.alphaDev.Decider.Fragments.SaveListFragment;
+import net.alphaDev.Decider.Model.Item;
+import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.UriBuilder;
 
 /**
  * 
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class DeciderActivity
-		extends SherlockActivity {
+		extends ListActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        ListView.OnItemLongClickListener,
+		ActionMode.Callback {
 
-	// Setup DialogIDs
-	public static final int DIALOG_ABOUT_ID = 0;
-	public static final int DIALOG_SAVE_ID = 1;
-	public static final int DIALOG_LOAD_ID = 2;
-	public static final int DIALOG_ADD_ID = 4;
-	public static final int DIALOG_EDIT_ID = 8;
-
-	// Fields for the UI Components
-	private WheelView wheel;
-
-	// Datasources (flagged static for synchronized access)
-	private static WheelViewAdapter adapter;
-	private static DeciderStorage database;
+	private DecideListAdapter mAdapter;
+	private ActionMode mActionMode;
 
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		initComponents();
-	}
-
-	private void initComponents() {
-		// Load UI layout from XML
 		setContentView(R.layout.main);
-
-		// Set empty DefaultListAdapter
-		if (adapter == null) {
-			adapter = new DecideListAdapter(this);
-		}
-
-		// Get references to the UI component instances
-		wheel = (WheelView) findViewById(R.id.list);
-
-		// Set Listeners
-		wheel.setViewAdapter(adapter);
+		setListAdapter(mAdapter = new DecideListAdapter(this));
+		//getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setOnItemLongClickListener(this);
 	}
 
-	// Emit WheelView to let external stuff manipulate
-	public WheelView getWheel() {
-		return wheel;
-	}
-
-	public void setAdapter(WheelViewAdapter adapter) {
-		DeciderActivity.adapter = adapter;
-		getWheel().setViewAdapter(adapter);
-	}
-
-	// Provide OptionsMenu from XML
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		final MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.decider_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem editItem = menu.findItem(R.id.edit_btn);
-		editItem.setEnabled(adapter.getItemsCount() > 0);
-
-		MenuItem saveItem = menu.findItem(R.id.save_btn);
-		saveItem.setEnabled(adapter.getItemsCount() > 0);
-
-		MenuItem clearItem = menu.findItem(R.id.clear_btn);
-		clearItem.setEnabled(adapter.getItemsCount() > 0);
-
+		boolean hasItems = mAdapter.getCount() > 0;
+		validateMenuItem(menu, R.id.save_btn, hasItems);
+		validateMenuItem(menu, R.id.clear_btn, hasItems);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
-	// Handle OptionsMenu clicks
+	private void validateMenuItem(Menu menu, int itemRes, boolean enabled) {
+		MenuItem item = menu.findItem(itemRes);
+		item.setEnabled(enabled);
+	}
+
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.clear_btn:
-			final DecideListAdapter dataSource = new DecideListAdapter(this);
-			setAdapter(dataSource);
-			return true;
-		case R.id.decide_btn:
-			int random = pickNumberLowerThan(adapter.getItemsCount());
-			Log.i("Decider", "item: " + random);
-			wheel.setCurrentItem(random, true);
-			return true;
-		case R.id.add_btn:
-			showDialog(DIALOG_ADD_ID);
-			return true;
-		case R.id.about_btn:
-			// Show About Dialog
-			showDialog(DIALOG_ABOUT_ID);
-			return true;
-		case R.id.save_btn:
-			// Show Save Dialog
-			if (adapter.getItemsCount() > 0) {
-				showDialog(DIALOG_SAVE_ID);
-			} else {
-				Toast.makeText(this, getString(R.string.empty_save), Toast.LENGTH_SHORT).show();
-			}
-			return true;
-		case R.id.load_btn:
-			// Show Load Dialog
-			showDialog(DIALOG_LOAD_ID);
-			return true;
-		case R.id.edit_btn:
-			showDialog(DIALOG_EDIT_ID);
-			return true;
-		default:
-			// default Android click handling
-			return super.onOptionsItemSelected(item);
-		}
-	}
+		DialogFragment fragment = null;
 
-	private int pickNumberLowerThan(int thisNumber) {
-		return (int) (Math.floor(Math.random() * thisNumber));
-	}
-
-	// Emit Database (Singleton like)
-	public DeciderStorage getDatabase() {
-		if (database == null) {
-			database = DeciderStorageFactory.buildStorage(this);
+		switch(item.getItemId()) {
+			case R.id.add_btn:
+			    fragment = new ItemFragment(this);
+				break;
+			case R.id.load_btn:
+			    fragment = new LoadListFragment(this);
+				break;
+			case R.id.about_btn:
+			    fragment = new AboutFragment();
+				break;
+            case R.id.save_btn:
+                fragment = new SaveListFragment(this);
+                break;
+            case R.id.clear_btn:
+                mAdapter.resetEntries();
+                break;
+			case R.id.decide_btn:
+			    //fragment = new DecideFragment();
+				break;
 		}
 
-		return database;
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	protected Dialog onCreateDialog(int id) {
-		Dialog mDialog;
-
-		switch (id) {
-		case DIALOG_ADD_ID:
-			mDialog = createAddDialog();
-			break;
-		case DIALOG_ABOUT_ID:
-			mDialog = createAboutDialog();
-			break;
-		case DIALOG_SAVE_ID:
-			mDialog = createSaveDialog();
-			break;
-		case DIALOG_LOAD_ID:
-			mDialog = createLoadDialog();
-			break;
-		case DIALOG_EDIT_ID:
-			mDialog = createEditDialog();
-			break;
-		default:
-			mDialog = super.onCreateDialog(id);
-		}
-		return mDialog;
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	protected void onPrepareDialog(int id, Dialog dialog) {
-		switch (id) {
-		case DIALOG_ADD_ID:
-			prepareAddDialog(dialog);
-			break;
-		case DIALOG_SAVE_ID:
-			// set/confirm the current lists name
-			prepareSaveDialog(dialog);
-			break;
-		case DIALOG_LOAD_ID:
-			// re-populate list of loadable lists
-			prepareLoadDialog(dialog);
-			break;
-		case DIALOG_EDIT_ID:
-			// re-populate list of loadable lists
-			prepareEditDialog(dialog);
-			break;
-		default:
-			super.onPrepareDialog(id, dialog);
-		}
-	}
-
-	private Dialog createAboutDialog() {
-		View mDialog = createDialog(R.layout.about_dialog);
-
-		return new AlertDialog.Builder(this).setView(mDialog).setTitle(R.string.about_title).create();
-	}
-
-	private Dialog createSaveDialog() {
-		View mDialog = createDialog(R.layout.save_dialog);
-		EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
-		input.setId(R.id.DIALOG_SAVE_TEXT);
-
-		return new AlertDialog.Builder(this).setView(mDialog).setTitle(R.string.list_title_dialog_message)
-				.setPositiveButton(R.string.save_btn, new SaveListAction(this))
-				.setNeutralButton(R.string.cancel, new DialogCancelledAction()).create();
-	}
-
-	private Dialog createEditDialog() {
-		View mDialog = createDialog(R.layout.save_dialog);
-		EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
-		input.setId(R.id.DIALOG_SAVE_TEXT);
-
-		return new AlertDialog.Builder(this).setView(mDialog).setTitle(R.string.edit_title_dialog_message)
-				.setPositiveButton(R.string.edit_btn, new EditItemAction(getWheel()))
-				.setNeutralButton(R.string.cancel, new DialogCancelledAction()).create();
-	}
-
-	private Dialog createAddDialog() {
-		View mDialog = createDialog(R.layout.save_dialog);
-		EditText input = (EditText) mDialog.findViewById(R.id.save_edittext);
-		input.setId(R.id.DIALOG_ADD_TEXT);
-
-		return new AlertDialog.Builder(this).setView(mDialog).setTitle(R.string.add_title_dialog_message)
-				.setPositiveButton(R.string.add_btn, new AddAction(this))
-				.setNeutralButton(R.string.cancel, new DialogCancelledAction()).create();
-	}
-
-	private Dialog createLoadDialog() {
-		View mDialog = createDialog(R.layout.load_dialog);
-
-		return new AlertDialog.Builder(this).setView(mDialog).setTitle(R.string.load_title_dialog_message).create();
-	}
-
-	private View createDialog(int dialog) {
-		LayoutInflater inflater = LayoutInflater.from(this);
-		return inflater.inflate(dialog, null);
-	}
-
-	private void prepareSaveDialog(Dialog mDialog) {
-		EditText input = (EditText) mDialog.findViewById(R.id.DIALOG_SAVE_TEXT);
-		ITitle currentList = (ITitle) adapter;
-		input.setText(currentList.getTitle());
-	}
-
-	private void prepareAddDialog(Dialog mDialog) {
-		EditText input = (EditText) mDialog.findViewById(R.id.DIALOG_ADD_TEXT);
-		input.setText("");
-	}
-
-	private void prepareEditDialog(Dialog mDialog) {
-		EditText input = (EditText) mDialog.findViewById(R.id.DIALOG_SAVE_TEXT);
-		int current = wheel.getCurrentItem();
-		DecideListAdapter a = (DecideListAdapter) adapter;
-		input.setText(a.getItemText(current));
-	}
-
-	private void prepareLoadDialog(Dialog dialog) {
-		ListAdapter listAdapter = getDatabase().getLists();
-		ListView list = (ListView) dialog.findViewById(R.id.load_list);
-		list.setOnItemClickListener(new LoadListAction(this, dialog));
-		list.setAdapter(listAdapter);
-	}
-
-	public void aboutHandler(View caller) {
-		Intent intent = null;
-		switch (caller.getId()) {
-		case R.id.about_http:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + getString(R.string.about_http)));
-			break;
-		case R.id.about_icon_link:
-			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("http://www.wpclipart.com/recreation/games/pool/eight_ball_large.png.html"));
-			break;
-		case R.id.about_wheel_link:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://code.google.com/p/android-wheel/"));
-			break;
-		case R.id.about_sherlock_link:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://actionbarsherlock.com/"));
-			break;
-		case R.id.about_mail:
-			String ver = getString(R.string.app_name) + " " + getString(R.string.app_version);
-			intent = new Intent(Intent.ACTION_SEND).setType("plain/text")
-					.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.about_mail) })
-					.putExtra(Intent.EXTRA_SUBJECT, ver);
-			break;
-		default:
-			break;
+		if(fragment != null) {
+			fragment.show(getFragmentManager(), "dialog");
 		}
 
-		if (intent != null) {
-			startActivity(intent);
+		return super.onOptionsItemSelected(item);
+	}
+
+	public boolean onItemLongClick(AdapterView<?> p1, View view, int p3, long p4) {
+		if(mActionMode != null) {
+			return false;
 		}
+
+		// Start the CAB using the ActionMode.Callback defined above
+		mActionMode = startActionMode(this);
+		view.setSelected(true);
+		return true;
+	}
+
+	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+		CursorLoader loader = new CursorLoader(this);
+		final long listId = bundle.getLong("list");
+		loader.setUri(UriBuilder.getItemUri());
+		loader.setSelection(Item.Columns.LIST + " = ?");
+		loader.setSelectionArgs(new String[]{
+			Long.toString(listId)
+		});
+		loader.setProjection(Item.DEFAULT_PROJECTION);
+		return loader;
+	}
+
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		mAdapter.swapCursor(cursor);
+	}
+
+	public void onLoaderReset(Loader<Cursor> p1) {
+		mAdapter.swapCursor(null);
+	}
+
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		MenuInflater inflater = mode.getMenuInflater();
+		inflater.inflate(R.menu.item_menu, menu);
+		return true;
+	}
+
+	public boolean onPrepareActionMode(ActionMode p1, Menu p2) {
+		return false;
+	}
+
+	public boolean onActionItemClicked(ActionMode p1, MenuItem p2) {
+		return false;
+	}
+
+	public void onDestroyActionMode(ActionMode p1) {
+		mActionMode = null;
 	}
 }

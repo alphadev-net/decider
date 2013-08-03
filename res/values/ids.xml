@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="DIALOG_ADD_TEXT" />
-    <item type="id" name="DIALOG_SAVE_TEXT" />
+	<item type="id" name="PROVIDER_LIST" />
+	<item type="id" name="PROVIDER_LIST_ID" />
+	<item type="id" name="PROVIDER_ITEM" />
+	<item type="id" name="PROVIDER_ITEM_ID" />
 </resources>

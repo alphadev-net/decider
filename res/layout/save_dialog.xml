@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/save_dialog"
-              style="@style/wrapfill.vert" >
-    <EditText
-        android:id="@+id/save_edittext"
-        style="@style/wrapfill" />
-</LinearLayout>
+<EditText
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/save_edittext"
+    android:paddingTop="28dp"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"/>
