@@ -36,7 +36,8 @@ public class DeciderListActivity
         ListView.OnItemClickListener,
         ListView.OnItemLongClickListener,
 		ActionMode.Callback,
-        ShakeAction.OnShakeListener {
+        ShakeAction.OnShakeListener,
+		DecideListAdapter.TitleChangeListener {
 
 	private DecideListAdapter mAdapter;
 	private ActionMode mActionMode;
@@ -56,11 +57,13 @@ public class DeciderListActivity
 	protected void onResume() {
 		super.onResume();
 		mShakeTracker.register(this);
+		mAdapter.registerTitleChangeListener(this);
 	}
 
 	@Override
 	protected void onPause() {
 		mShakeTracker.unregister();
+		mAdapter.unregisterTitleChasngeListener(this);
 		super.onPause();
 	}
 
@@ -177,4 +180,9 @@ public class DeciderListActivity
     public void shake() {
         triggerDecider();
     }
+
+	@Override
+	public void onTitleChange(CharSequence title) {
+		setTitle(title);
+	}
 }
