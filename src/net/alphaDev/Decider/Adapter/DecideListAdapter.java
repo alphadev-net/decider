@@ -52,10 +52,12 @@ public class DecideListAdapter
 
         if(cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(Item.Columns._ID);
+            int listIndex = cursor.getColumnIndex(Item.Columns.LIST);
             int labelIndex = cursor.getColumnIndex(Item.Columns.LABEL);
             do {
                 InnerItem item = new InnerItem();
                 item.id = cursor.getLong(idIndex);
+                item.list = cursor.getLong(listIndex);
                 item.label = cursor.getString(labelIndex);
                 mEntries.add(item);
             } while(cursor.moveToNext());
@@ -95,9 +97,10 @@ public class DecideListAdapter
         return convertView;
     }
 
-    private class InnerItem {
+    public class InnerItem {
         public long id;
         public String label;
+        public long list;
         public boolean selected;
     }
 }

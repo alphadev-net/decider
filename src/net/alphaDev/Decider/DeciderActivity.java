@@ -20,6 +20,7 @@ import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Fragments.AboutFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
 import net.alphaDev.Decider.Fragments.LoadListFragment;
+import net.alphaDev.Decider.Fragments.SaveListFragment;
 import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.UriBuilder;
@@ -80,6 +81,9 @@ public class DeciderActivity
 			case R.id.about_btn:
 			    fragment = new AboutFragment();
 				break;
+            case R.id.save_btn:
+                fragment = new SaveListFragment(this);
+                break;
             case R.id.clear_btn:
                 mAdapter.resetEntries();
                 break;
