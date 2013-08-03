@@ -37,7 +37,7 @@ public class DecideActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mShakeTracker.register();
+		mShakeTracker.register(this);
 	}
 
 	@Override

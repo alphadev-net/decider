@@ -55,7 +55,7 @@ public class DeciderListActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mShakeTracker.register();
+		mShakeTracker.register(this);
 	}
 
 	@Override
