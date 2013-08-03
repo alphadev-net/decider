@@ -14,6 +14,7 @@ import android.widget.ListView;
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Adapter.LoadListAdapter;
+import net.alphaDev.Decider.Controllers.ListController;
 import net.alphaDev.Decider.DeciderActivity;
 import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
@@ -60,10 +61,7 @@ public class LoadListFragment
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		CursorLoader loader = new CursorLoader(mContext);
-		loader.setUri(UriBuilder.getListUri());
-		loader.setProjection(List.DEFAULT_PROJECTION);
-		return loader;
+		return ListController.getLists(mContext);
 	}
 
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {

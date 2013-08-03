@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
+import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.Fragments.AboutFragment;
 import net.alphaDev.Decider.Fragments.DecideFragment;
 import net.alphaDev.Decider.Fragments.ItemFragment;
@@ -112,16 +113,9 @@ public class DeciderActivity
 	}
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		CursorLoader loader = new CursorLoader(this);
-		final long listId = bundle.getLong("list");
-		loader.setUri(UriBuilder.getItemUri());
-		loader.setSelection(Item.Columns.LIST + " = ?");
-		loader.setSelectionArgs(new String[]{
-			Long.toString(listId)
-		});
-		loader.setProjection(Item.DEFAULT_PROJECTION);
-		return loader;
-	}
+        final long listId = bundle.getLong("list");
+		return ItemController.getItemsByListId(this, listId);
+    }
 
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		mAdapter.swapCursor(cursor);
