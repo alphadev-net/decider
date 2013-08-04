@@ -24,26 +24,20 @@ public class ListController {
         return loader;
     }
 
-	public static void save(Context context, String label, DecideListAdapter list) throws RemoteException {
+	public static void save(Context context, List list) throws RemoteException {
 		final Uri baseUri = UriBuilder.getListUri();
 		final ContentResolver resolver = context.getContentResolver();
 		final ContentProviderClient client = resolver.acquireContentProviderClient(baseUri);
 
 		final ContentValues values = new ContentValues();
-		values.put(List.Columns.LABEL, label);
+		values.put(List.Columns.LABEL, list.getLabel().toString());
 
-		long id = ItemController.findParentList(list);
-		if(id == -1) {
-			client.insert(baseUri, values);
+		if(list.isSaved()) {
+            Uri itemId = UriBuilder.getListUri(list.getId());
+            client.update(itemId, values, null, null);
 		} else {
-			Uri itemId = UriBuilder.getListUri(id);
-			client.update(itemId, values, null, null);
-		}
-
-		for(int i = 0; i < list.getCount(); i++) {
-			DecideListAdapter.InnerItem item = (DecideListAdapter.InnerItem) list.getItem(i);
-			item.list = id;
-			ItemController.save(context, item);
+            Uri uri = client.insert(baseUri, values);
+            list.setSaved(uri);
 		}
 
 		client.release();

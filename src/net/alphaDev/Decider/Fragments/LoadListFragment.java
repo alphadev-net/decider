@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.LoadListAdapter;
 import net.alphaDev.Decider.Controllers.ListController;
 import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Constants;
 
 /**
  *
@@ -49,13 +51,13 @@ public class LoadListFragment
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+	public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
 		Bundle bundle = new Bundle(1);
-		bundle.putLong("list", p4);
-		loaderManager.initLoader(p3, bundle, mContext.getListFragment());
+		bundle.putLong(Constants.LIST_PARAMETER, id);
+		loaderManager.initLoader(pos, bundle, mContext.getListFragment());
 		dismissAllowingStateLoss();
 	}
-	
+
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		return ListController.getLists(mContext);
 	}

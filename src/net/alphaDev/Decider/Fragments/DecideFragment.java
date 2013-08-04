@@ -3,13 +3,16 @@ package net.alphaDev.Decider.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.alphaDev.Decider.Actions.ShakeAction;
+import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Constants;
 
 /**
  *
@@ -19,7 +22,7 @@ public class DecideFragment
         extends Fragment
         implements ShakeAction.OnShakeListener {
 
-    private CharSequence[] mItems;
+    private Item[] mItems;
     private TextView resultView;
     private ShakeAction mShakeTracker;
 
@@ -32,7 +35,11 @@ public class DecideFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final Bundle extras = getArguments();
         if(extras != null) {
-            mItems = extras.getCharSequenceArray("list");
+            Parcelable[] parcels = extras.getParcelableArray(Constants.LIST_PARAMETER);
+            mItems = new Item[parcels.length];
+            for(int i=0; i<parcels.length; i++) {
+                mItems[i] = (Item) parcels[i];
+            }
         }
 
         resultView = (TextView) view.findViewById(R.id.resultView);
@@ -64,7 +71,7 @@ public class DecideFragment
 
     private CharSequence getRandomItemLabel() {
         int chosen = pickNumberLowerThan(mItems.length);
-        return mItems[chosen];
+        return mItems[chosen].getLabel();
     }
 
     private int pickNumberLowerThan(int max) {

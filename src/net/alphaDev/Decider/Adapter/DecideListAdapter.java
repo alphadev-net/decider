@@ -3,6 +3,9 @@ package net.alphaDev.Decider.Adapter;
 import android.R;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,48 +14,68 @@ import android.widget.TextView;
 
 import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.Model.Item;
+import net.alphaDev.Decider.Model.List;
+import net.alphaDev.Decider.Util.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class DecideListAdapter
-		extends BaseAdapter {
+		extends BaseAdapter
+        implements Parcelable {
 
-    private long mListId = -1;
-    private ArrayList<InnerItem> mEntries;
-    private boolean isAltered = false;
+    private List mList;
+    private ArrayList<Item> mEntries;
+    private HashMap<Item, Boolean> mSelection;
     private Context mContext;
-	private String mTitle;
 
 	public DecideListAdapter(Context context) {
         mContext = context;
         resetEntries();
 	}
 
+    public DecideListAdapter(Context context, Parcel in) {
+        this(context);
+        ClassLoader listLoader = List.class.getClassLoader();
+        mList = (List) in.readParcelable(listLoader);
+
+        ClassLoader itemLoader = Item.class.getClassLoader();
+        Parcelable[] items = in.readParcelableArray(itemLoader);
+        for(Parcelable item: items) {
+            addEntry((Item)item);
+        }
+    }
+
     public void addEntry(CharSequence label) {
-        InnerItem item = new InnerItem();
-        item.label = label.toString();
+        final Item item = new Item(0, label);
+        addEntry(item);
+    }
+
+    public void addEntry(Item item) {
         mEntries.add(item);
+        mSelection.put(item, false);
         notifyDataSetChanged();
-        isAltered = true;
     }
 
     public void resetEntries() {
-        mEntries = new ArrayList<InnerItem>();
+        mEntries = new ArrayList<Item>();
+        resetSelection();
         notifyDataSetChanged();
-        isAltered = false;
     }
 
     public void setSelected(int pos, boolean selected) {
-        mEntries.get(pos).selected = selected;
+        Item item = mEntries.get(pos);
+        mSelection.put(item, selected);
         notifyDataSetChanged();
     }
 
     public boolean isSelected(int pos) {
-        return mEntries.get(pos).selected;
+        Item item = mEntries.get(pos);
+        return mSelection.get(item);
     }
 
     public void toggleSelection(int pos) {
@@ -61,18 +84,13 @@ public class DecideListAdapter
     }
 
     public void resetSelection() {
-        for(InnerItem item: mEntries) {
-            item.selected = false;
-        }
+        mSelection = new HashMap<Item, Boolean>();
         notifyDataSetChanged();
     }
 
-    public CharSequence[] dumpItems() {
-        CharSequence[] items = new CharSequence[mEntries.size()];
-        for(int i=0; i<mEntries.size(); i++) {
-            items[i] = mEntries.get(i).label;
-        }
-        return items;
+    public Item[] dumpItems() {
+        Item[] items = new Item[mEntries.size()];
+        return mEntries.toArray(items);
     }
 
     public void swapCursor(Cursor cursor) {
@@ -81,22 +99,16 @@ public class DecideListAdapter
             return;
         }
 
+        Bundle extras = cursor.getExtras();
+        mList = extras.getParcelable(Constants.LIST_PARAMETER);
+
         if(cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(Item.Columns._ID);
-            int listIndex = cursor.getColumnIndex(Item.Columns.LIST);
-            int labelIndex = cursor.getColumnIndex(Item.Columns.LABEL);
             do {
-                InnerItem item = new InnerItem();
-                item.id = cursor.getLong(idIndex);
-                item.list = cursor.getLong(listIndex);
-                item.label = cursor.getString(labelIndex);
-                mEntries.add(item);
+                addEntry(new Item(cursor));
             } while(cursor.moveToNext());
         }
 
-        mListId = ItemController.findParentList(this);
         notifyDataSetChanged();
-        isAltered = false;
     }
 
     @Override
@@ -111,7 +123,7 @@ public class DecideListAdapter
 
     @Override
     public long getItemId(int i) {
-        return mEntries.get(i).id;
+        return mEntries.get(i).getId();
     }
 
     @Override
@@ -129,11 +141,20 @@ public class DecideListAdapter
         return convertView;
     }
 
-    public class InnerItem {
-        public long id;
-        public String label;
-        public long list;
-        public boolean selected;
+    public List getList() {
+        return mList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(mList, i);
+        Parcelable[] array = new Parcelable[mEntries.size()];
+        array = mEntries.toArray(array);
+        parcel.writeParcelableArray(array, i);
+    }
 }

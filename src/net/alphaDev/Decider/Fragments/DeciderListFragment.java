@@ -25,6 +25,7 @@ import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.DecideActivity;
 import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Constants;
 
 /**
  *
@@ -150,7 +151,7 @@ public class DeciderListFragment
     }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        final long listId = bundle.getLong("list");
+        final long listId = bundle.getLong(Constants.LIST_PARAMETER);
         return ItemController.getItemsByListId(mActivity, listId);
     }
 

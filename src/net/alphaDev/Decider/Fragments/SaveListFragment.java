@@ -19,6 +19,7 @@ import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Constants;
 import net.alphaDev.Decider.Util.UriBuilder;
 
 /**
@@ -33,12 +34,13 @@ public class SaveListFragment
     private DecideListAdapter mAdapter;
     private Context mContext;
     private TextView mText;
-    private long mId = -1;
+    private List mList;
     private CharSequence mListLabel;
 
     public SaveListFragment(DeciderListActivity mContext) {
         this.mContext = mContext;
         this.mAdapter = (DecideListAdapter) mContext.getListFragment().getListAdapter();
+        this.mList = mAdapter.getList();
     }
 
     @Override
@@ -54,7 +56,7 @@ public class SaveListFragment
                     .setPositiveButton(R.string.save_btn, this)
                     .create();
         } finally {
-            long parent = findParentList(mAdapter);
+            long parent = mAdapter.getList().getId();
             if(parent != -1) {
                 final Bundle bundle = new Bundle(1);
                 bundle.putLong("list", parent);
@@ -69,7 +71,7 @@ public class SaveListFragment
         if(label.length() == 0) {
             Toast.makeText(mContext, R.string.empty_save, Toast.LENGTH_SHORT).show();
         } else {
-            if(mListLabel != label || mId == -1) {
+            if(mListLabel != label || -1 == -1) {
                 // TODO: implement fresh list saving
             } else {
                 // TODO: implement list updating
@@ -78,20 +80,9 @@ public class SaveListFragment
         }
     }
 
-    private static long findParentList(DecideListAdapter adapter) {
-        long result = -1;
-        for(int i=0; i<adapter.getCount(); i++) {
-            DecideListAdapter.InnerItem item = (DecideListAdapter.InnerItem) adapter.getItem(i);
-            if(item.id != result) {
-                result = item.list;
-            }
-        }
-        return result;
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        long parentList = bundle.getLong("list");
+        long parentList = bundle.getLong(Constants.LIST_PARAMETER);
         final CursorLoader loader = new CursorLoader(mContext);
         loader.setUri(UriBuilder.getListUri(parentList));
         loader.setProjection(List.DEFAULT_PROJECTION);
@@ -104,7 +95,7 @@ public class SaveListFragment
         if(!cursor.isAfterLast()) {
             int idIndex = cursor.getColumnIndex(List.Columns._ID);
             int labelIndex = cursor.getColumnIndex(List.Columns.LABEL);
-            mId = cursor.getLong(idIndex);
+            //mId = cursor.getLong(idIndex);
             mListLabel = cursor.getString(labelIndex);
             mText.setText(mListLabel);
         }
