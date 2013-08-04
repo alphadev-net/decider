@@ -5,8 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.FloatMath;
-import android.widget.Toast;
 
 /**
  *
@@ -48,19 +46,11 @@ public class ShakeAction
 	/** The last z position. */
 	private float lastZ = 0;
 
-	private Context mContext;
     private OnShakeListener mListener;
     private SensorManager mSensorManager;
-    private float mAccel; // acceleration apart from gravity
-    private float mAccelCurrent; // current acceleration including gravity
-    private float mAccelLast; // last acceleration including gravity
 
     public ShakeAction(Context context) {
-		mContext = context;
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
     }
 
     public void setOnShakeListener(OnShakeListener listener) {
@@ -69,9 +59,10 @@ public class ShakeAction
 
 	public void register(OnShakeListener listener) {
 		mListener = listener;
-		mSensorManager.registerListener(this,
-		    mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-			SensorManager.SENSOR_DELAY_NORMAL);
+        Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if(sensor != null) {
+		    mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
 	}
 
 	public void unregister() {
