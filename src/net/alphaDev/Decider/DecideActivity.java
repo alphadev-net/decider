@@ -21,6 +21,7 @@ public class DecideActivity
 
         if (icicle == null) {
             Fragment mFragment = new DecideFragment();
+            mFragment.setArguments(getIntent().getExtras());
             mFragment.setRetainInstance(true);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.add(android.R.id.content, mFragment).commit();
