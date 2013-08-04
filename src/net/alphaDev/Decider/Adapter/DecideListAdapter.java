@@ -26,7 +26,6 @@ public class DecideListAdapter
     private boolean isAltered = false;
     private Context mContext;
 	private String mTitle;
-	private TitleChangeListener mListener;
 
 	public DecideListAdapter(Context context) {
         mContext = context;
@@ -125,7 +124,7 @@ public class DecideListAdapter
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.text1);
-        textView.setText(mEntries.get(i).label);
+        textView.setText(mEntries.get(i).getLabel());
 
         return convertView;
     }
@@ -137,21 +136,4 @@ public class DecideListAdapter
         public boolean selected;
     }
 
-	private void setTitle(CharSequence title) {
-		if(mListener != null) {
-			mListener.onTitleChange(title);
-		}
-	}
-
-	public void registerTitleChangeListener(TitleChangeListener listener) {
-		mListener = listener;
-	}
-
-	public void unregisterTitleChasngeListener(TitleChangeListener listener) {
-		mListener = null;
-	}
-
-	public interface TitleChangeListener {
-		public void onTitleChange(CharSequence newTitle);
-	}
 }
