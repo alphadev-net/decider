@@ -1,5 +1,6 @@
 package net.alphaDev.Decider.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ public class DecideFragment
 
     private CharSequence[] mItems;
     private TextView resultView;
+    private ShakeAction mShakeTracker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +37,19 @@ public class DecideFragment
 
         resultView = (TextView) view.findViewById(R.id.resultView);
         decideAction();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mShakeTracker = new ShakeAction(getActivity());
+        mShakeTracker.register();
+    }
+
+    @Override
+    public void onDetach() {
+        mShakeTracker.unregister();
+        super.onDetach();
     }
 
     private void decideAction() {

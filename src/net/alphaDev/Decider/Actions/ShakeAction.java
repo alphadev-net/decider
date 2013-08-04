@@ -5,8 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
-import java.util.List;
+import android.util.FloatMath;
 
 /**
  *
@@ -14,8 +13,6 @@ import java.util.List;
  */
 public class ShakeAction
         implements SensorEventListener {
-
-    private static final int sFlags = SensorManager.SENSOR_ACCELEROMETER;
 
     private OnShakeListener mListener;
     private SensorManager mSensorManager;
@@ -25,9 +22,6 @@ public class ShakeAction
 
     public ShakeAction(Context context) {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mSensorManager.registerListener(this,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -42,13 +36,23 @@ public class ShakeAction
         mListener = listener;
     }
 
+	public void register() {
+		mSensorManager.registerListener(this,
+		    mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+			SensorManager.SENSOR_DELAY_NORMAL);
+	}
+
+	public void unregister() {
+		mSensorManager.unregisterListener(this);
+	}
+
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         float x = sensorEvent.values[0];
         float y = sensorEvent.values[1];
         float z = sensorEvent.values[2];
         mAccelLast = mAccelCurrent;
-        mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
+        mAccelCurrent = FloatMath.sqrt(x * x + y * y + z * z);
         float delta = mAccelCurrent - mAccelLast;
         mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 

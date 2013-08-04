@@ -1,5 +1,6 @@
 package net.alphaDev.Decider.Fragments;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -40,6 +41,7 @@ public class DeciderListFragment
     private DecideListAdapter mAdapter;
     private ActionMode mActionMode;
     private DeciderListActivity mActivity;
+    private ShakeAction mShakeTracker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +59,19 @@ public class DeciderListFragment
             list.setOnItemLongClickListener(this);
             list.setOnItemClickListener(this);
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mShakeTracker = new ShakeAction(getActivity());
+        mShakeTracker.register();
+    }
+
+    @Override
+    public void onDetach() {
+        mShakeTracker.unregister();
+        super.onDetach();
     }
 
     @Override
