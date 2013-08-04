@@ -52,6 +52,7 @@ public class DeciderListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
         setListAdapter(mAdapter = new DecideListAdapter(mActivity));
 
         final ListView list = getListView();
