@@ -46,7 +46,7 @@ public class DeciderListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = (DeciderListActivity) getActivity();
-        return inflater.inflate(R.layout.decider_list, container, true);
+        return inflater.inflate(R.layout.decider_list, container, false);
     }
 
     @Override

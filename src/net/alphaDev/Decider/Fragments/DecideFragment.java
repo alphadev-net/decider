@@ -25,7 +25,7 @@ public class DecideFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.decider_dialog, container, true);
+        return inflater.inflate(R.layout.decider_dialog, container, false);
     }
 
     @Override
