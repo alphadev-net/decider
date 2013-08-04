@@ -66,14 +66,19 @@ public class DeciderListFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mShakeTracker = new ShakeAction(getActivity());
-        mShakeTracker.register(this);
     }
 
-    @Override
-    public void onDetach() {
-        mShakeTracker.unregister();
-        super.onDetach();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		mShakeTracker.register(this);
+	}
+
+	@Override
+	public void onPause() {
+		mShakeTracker.unregister();
+		super.onPause();
+	}
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

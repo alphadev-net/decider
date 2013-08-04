@@ -43,14 +43,19 @@ public class DecideFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mShakeTracker = new ShakeAction(getActivity());
-        mShakeTracker.register(this);
     }
 
-    @Override
-    public void onDetach() {
-        mShakeTracker.unregister();
-        super.onDetach();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		mShakeTracker.register(this);
+	}
+
+	@Override
+	public void onPause() {
+		mShakeTracker.unregister();
+		super.onPause();
+	}
 
     private void decideAction() {
         CharSequence randomItem = getRandomItemLabel();
