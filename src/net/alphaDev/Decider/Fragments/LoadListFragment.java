@@ -52,7 +52,7 @@ public class LoadListFragment
 	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
 		Bundle bundle = new Bundle(1);
 		bundle.putLong("list", p4);
-		loaderManager.initLoader(p3, bundle, mContext);
+		loaderManager.initLoader(p3, bundle, mContext.getListFragment());
 		dismissAllowingStateLoss();
 	}
 	

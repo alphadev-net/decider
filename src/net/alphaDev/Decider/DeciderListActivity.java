@@ -29,14 +29,8 @@ public class DeciderListActivity
         }
 	}
 
-    public DecideListAdapter getListAdapter() {
+    public DeciderListFragment getListFragment() {
         FragmentManager fragmentManager = getFragmentManager();
-        DeciderListFragment fragment = (DeciderListFragment) fragmentManager.findFragmentByTag("list");
-
-        if(fragment != null) {
-            return (DecideListAdapter) fragment.getListAdapter();
-        } else {
-            return null;
-        }
+        return (DeciderListFragment) fragmentManager.findFragmentByTag("list");
     }
 }

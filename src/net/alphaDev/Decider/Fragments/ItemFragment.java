@@ -29,12 +29,7 @@ public class ItemFragment
 
     public ItemFragment(DeciderListActivity context) {
         mContext = context;
-        mAdapter = (DecideListAdapter) context.getListAdapter();
-    }
-
-    public ItemFragment(DeciderListActivity context, long id) {
-        this(context);
-        this.id = id;
+        mAdapter = (DecideListAdapter) context.getListFragment().getListAdapter();
     }
 
     @Override

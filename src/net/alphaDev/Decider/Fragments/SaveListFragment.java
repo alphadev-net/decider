@@ -38,7 +38,7 @@ public class SaveListFragment
 
     public SaveListFragment(DeciderListActivity mContext) {
         this.mContext = mContext;
-        this.mAdapter = (DecideListAdapter) mContext.getListAdapter();
+        this.mAdapter = (DecideListAdapter) mContext.getListFragment().getListAdapter();
     }
 
     @Override

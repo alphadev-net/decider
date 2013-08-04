@@ -65,7 +65,7 @@ public class DeciderListFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mShakeTracker = new ShakeAction(getActivity());
-        mShakeTracker.register();
+        mShakeTracker.register(this);
     }
 
     @Override
