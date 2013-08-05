@@ -15,7 +15,6 @@ public class Item
 	public static final String TABLE = "entries";
 
     private static final int savedFlag = 1;
-    private static final int deletedFlag = 2;
 
     public static final class Columns implements BaseColumns {
 		public static final String LIST = "label";
@@ -36,8 +35,7 @@ public class Item
             item.mList = in.readLong();
             item.mLabel = in.readString();
             int flags = in.readInt();
-            item.mSaved = (flags|savedFlag) == flags;
-            item.mDeleted = (flags|deletedFlag) == flags;
+            item.mSaved = (flags&savedFlag) == savedFlag;
             return item;
         }
 
@@ -51,7 +49,6 @@ public class Item
     private CharSequence mLabel;
     private long mList;
     private boolean mSaved;
-    private boolean mDeleted;
 
     private Item()  {
     }
@@ -85,7 +82,6 @@ public class Item
         parcel.writeLong(mList);
         parcel.writeString(mLabel.toString());
         int flags = mSaved?savedFlag:0;
-        flags += mDeleted?deletedFlag:0;
         parcel.writeInt(flags);
     }
 

@@ -141,6 +141,16 @@ public class DecideListAdapter
         return convertView;
     }
 
+	public java.util.List<Item> getSelectedItems() {
+		ArrayList<Item> selected = new ArrayList<Item>();
+		for(Item item: mEntries) {
+			if(mSelection.get(item)) {
+				selected.add(item);
+			}
+		}
+		return selected;
+	}
+
     public List getList() {
         return mList;
     }

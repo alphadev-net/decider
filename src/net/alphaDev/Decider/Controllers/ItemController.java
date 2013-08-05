@@ -28,8 +28,7 @@ public class ItemController {
 
 	public static void save(Context context, Item item) throws RemoteException {
 		final Uri baseUri = UriBuilder.getItemUri();
-		final ContentResolver resolver = context.getContentResolver();
-		final ContentProviderClient client = resolver.acquireContentProviderClient(baseUri);
+		ContentProviderClient client = getClient(context, baseUri);
 
 		final ContentValues values = new ContentValues();
 		values.put(Item.Columns.LABEL, item.getLabel().toString());
@@ -42,6 +41,17 @@ public class ItemController {
 			client.update(itemId, values, null, null);
 		}
 
+		client.release();
+	}
+
+	private static ContentProviderClient getClient(Context context, Uri baseUri) {
+		final ContentResolver resolver = context.getContentResolver();
+		return resolver.acquireContentProviderClient(baseUri);
+	}
+
+	public static void delete(Context context, Uri uri) throws RemoteException {
+		ContentProviderClient client = getClient(context, UriBuilder.getItemUri());
+		client.delete(uri, null, null);
 		client.release();
 	}
 }

@@ -8,6 +8,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -18,14 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
+import java.util.List;
 import net.alphaDev.Decider.Actions.ShakeAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Controllers.ItemController;
 import net.alphaDev.Decider.DecideActivity;
 import net.alphaDev.Decider.DeciderListActivity;
+import net.alphaDev.Decider.Model.Item;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.Constants;
+import net.alphaDev.Decider.Util.UriBuilder;
+import android.os.RemoteException;
 
 /**
  *
@@ -139,14 +143,14 @@ public class DeciderListFragment
         startActivity(intent);
     }
 
-    public boolean onItemLongClick(AdapterView<?> p1, View view, int p3, long p4) {
+    public boolean onItemLongClick(AdapterView<?> p1, View view, int id, long p4) {
         if(mActionMode != null) {
             return false;
         }
 
         // Start the CAB using the ActionMode.Callback defined above
         mActionMode = mActivity.startActionMode(this);
-        mAdapter.setSelected(p3, true);
+        mAdapter.setSelected(id, true);
         return true;
     }
 
@@ -171,11 +175,32 @@ public class DeciderListFragment
         return true;
     }
 
-    public boolean onPrepareActionMode(ActionMode p1, Menu p2) {
-        return false;
+    public boolean onPrepareActionMode(ActionMode p1, Menu menu) {
+		List<Item> selectedItems = mAdapter.getSelectedItems();
+		MenuItem editItem = menu.findItem(R.id.edit_btn);
+		editItem.setEnabled(selectedItems.size()==1);
+		MenuItem deleteItem = menu.findItem(R.id.delete_btn);
+		deleteItem.setEnabled(selectedItems.size()>=1);
+        return true;
     }
 
-    public boolean onActionItemClicked(ActionMode p1, MenuItem p2) {
+    public boolean onActionItemClicked(ActionMode p1, MenuItem item) {
+		DialogFragment fragment = null;
+
+		switch(item.getItemId()) {
+			case R.id.edit_btn:
+			    fragment = new ItemFragment(mActivity);
+				break;
+			case R.id.delete_btn:
+			    deleteSelection();
+				break;
+		}
+
+		if(fragment != null) {
+			fragment.show(getFragmentManager(), "dialog");
+			return true;
+		}
+
         return false;
     }
 
@@ -183,10 +208,21 @@ public class DeciderListFragment
         mActionMode = null;
     }
 
+	private void deleteSelection() {
+		List<Item> selectedItems = mAdapter.getSelectedItems();
+		for(Item item: selectedItems) {
+			Uri uri = UriBuilder.getItemUri(item.getId());
+			try {
+				ItemController.delete(mActivity, uri);
+			} catch (RemoteException e) {}
+		}
+	}
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(mActionMode != null) {
             mAdapter.toggleSelection(i);
+			mActionMode.invalidate();
         }
     }
 
