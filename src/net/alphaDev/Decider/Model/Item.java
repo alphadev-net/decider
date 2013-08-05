@@ -93,9 +93,17 @@ public class Item
         return mLabel;
     }
 
+	public void setLabel(CharSequence newItem) {
+		mLabel = newItem;
+	}
+
     public long getList() {
         return mList;
     }
+
+	public void setList(long id) {
+		mList = id;
+	}
 
     public void setSaved() {
         mSaved = true;

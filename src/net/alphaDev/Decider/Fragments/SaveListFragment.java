@@ -21,6 +21,10 @@ import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
 import net.alphaDev.Decider.Util.Constants;
 import net.alphaDev.Decider.Util.UriBuilder;
+import net.alphaDev.Decider.Controllers.ItemController;
+import net.alphaDev.Decider.Model.Item;
+import android.os.RemoteException;
+import net.alphaDev.Decider.Controllers.ListController;
 
 /**
  *
@@ -28,14 +32,12 @@ import net.alphaDev.Decider.Util.UriBuilder;
  */
 public class SaveListFragment
         extends DialogFragment
-        implements DialogInterface.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements DialogInterface.OnClickListener {
 
     private DecideListAdapter mAdapter;
     private Context mContext;
     private TextView mText;
     private List mList;
-    private CharSequence mListLabel;
 
     public SaveListFragment(DeciderListActivity mContext) {
         this.mContext = mContext;
@@ -45,63 +47,50 @@ public class SaveListFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        try {
-            final LayoutInflater inflater = LayoutInflater.from(mContext);
-            mText = (TextView) inflater.inflate(R.layout.save_dialog, null, false);
-            return new AlertDialog.Builder(mContext)
-                    .setTitle(R.string.list_title_dialog_message)
-                    .setView(mText)
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel, new DialogCancelledAction())
-                    .setPositiveButton(R.string.save_btn, this)
-                    .create();
-        } finally {
-            long parent = mAdapter.getList().getId();
-            if(parent != -1) {
-                final Bundle bundle = new Bundle(1);
-                bundle.putLong("list", parent);
-                getLoaderManager().initLoader(-1, bundle, this);
-            }
-        }
+        final LayoutInflater inflater = LayoutInflater.from(mContext);
+        mText = (TextView) inflater.inflate(R.layout.save_dialog, null, false);
+
+		if(mList != null) {
+			mText.setText(mList.getLabel());
+		}
+
+        return new AlertDialog.Builder(mContext)
+                .setTitle(R.string.list_title_dialog_message)
+                .setView(mText)
+                .setCancelable(true)
+				.setNegativeButton(R.string.cancel, new DialogCancelledAction())
+                .setPositiveButton(R.string.save_btn, this)
+                .create();
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onClick(DialogInterface dialogInterface, int btnId) {
         CharSequence label = mText.getText();
         if(label.length() == 0) {
             Toast.makeText(mContext, R.string.empty_save, Toast.LENGTH_SHORT).show();
         } else {
-            if(mListLabel != label || -1 == -1) {
-                // TODO: implement fresh list saving
-            } else {
-                // TODO: implement list updating
-            }
+            if(mList == null) {
+				mList = new List(mText.getText());
+			}
+			
+			try {
+				ListController.save(mContext, mList);
+			} catch (RemoteException e) {}
+
+			for(int i = 0; i < mAdapter.getCount(); i++) {
+				Item item = (Item) mAdapter.getItem(i);
+				item.setList(mList.getId());
+				if(!item.isSaved() || !mList.getLabel().equals(mText.getText())) {
+					try {
+						ItemController.save(mContext, item);
+					} catch (RemoteException e) {}
+				} else {
+					try {
+						ItemController.update(mContext, item);
+					} catch (RemoteException e) {}
+				}
+			}
             dialogInterface.dismiss();
         }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        long parentList = bundle.getLong(Constants.LIST_PARAMETER);
-        final CursorLoader loader = new CursorLoader(mContext);
-        loader.setUri(UriBuilder.getListUri(parentList));
-        loader.setProjection(List.DEFAULT_PROJECTION);
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
-            int idIndex = cursor.getColumnIndex(List.Columns._ID);
-            int labelIndex = cursor.getColumnIndex(List.Columns.LABEL);
-            //mId = cursor.getLong(idIndex);
-            mListLabel = cursor.getString(labelIndex);
-            mText.setText(mListLabel);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 }

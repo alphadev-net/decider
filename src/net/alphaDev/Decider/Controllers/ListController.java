@@ -26,8 +26,7 @@ public class ListController {
 
 	public static void save(Context context, List list) throws RemoteException {
 		final Uri baseUri = UriBuilder.getListUri();
-		final ContentResolver resolver = context.getContentResolver();
-		final ContentProviderClient client = resolver.acquireContentProviderClient(baseUri);
+		final ContentProviderClient client = getClient(context, baseUri);
 
 		final ContentValues values = new ContentValues();
 		values.put(List.Columns.LABEL, list.getLabel().toString());
@@ -41,5 +40,10 @@ public class ListController {
 		}
 
 		client.release();
+	}
+
+	private static ContentProviderClient getClient(Context context, Uri baseUri) {
+		final ContentResolver resolver = context.getContentResolver();
+		return resolver.acquireContentProviderClient(baseUri);
 	}
 }

@@ -13,6 +13,8 @@ import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Model.Item;
+import net.alphaDev.Decider.Util.Constants;
 
 /**
  *
@@ -22,7 +24,7 @@ public class ItemFragment
         extends DialogFragment
         implements DialogInterface.OnClickListener {
 
-    private long id;
+    private Item mItem;
     private Context mContext;
     private DecideListAdapter mAdapter;
     private TextView mText;
@@ -36,20 +38,35 @@ public class ItemFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         mText = (TextView) inflater.inflate(R.layout.save_dialog, null, false);
-        return new AlertDialog.Builder(mContext)
-            .setTitle(R.string.add_title_dialog_message)
-            .setView(mText)
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+		if(getArguments() != null) {
+		    mItem = getArguments().getParcelable(Constants.ITEM_PARAMETER);
+			mText.setText(mItem.getLabel());
+		}
+
+		if(mItem == null) {
+            builder.setTitle(R.string.add_title_dialog_message)
+			    .setPositiveButton(R.string.add_btn, this);
+		} else {
+			builder.setTitle(R.string.edit_title_dialog_message)
+			    .setPositiveButton(R.string.edit_btn, this);
+		}
+        return builder.setView(mText)
             .setCancelable(true)
             .setNegativeButton(R.string.cancel, new DialogCancelledAction())
-            .setPositiveButton(R.string.add_btn, this)
-            .create();
+			.create();
     }
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         CharSequence newItem = mText.getText();
         if(newItem != null && newItem.length() > 0) {
-            mAdapter.addEntry(newItem);
+			if(mItem == null) {
+                mAdapter.addEntry(newItem);
+			} else {
+				mAdapter.updateEntry(mItem.getId(), newItem);
+			}
         }
         dialogInterface.dismiss();
     }

@@ -184,20 +184,22 @@ public class DeciderListFragment
         return true;
     }
 
-    public boolean onActionItemClicked(ActionMode p1, MenuItem item) {
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
 		DialogFragment fragment = null;
 
 		switch(item.getItemId()) {
 			case R.id.edit_btn:
-			    fragment = new ItemFragment(mActivity);
+			    fragment = getEditSelectionFragment();
+				actionMode.finish();
 				break;
 			case R.id.delete_btn:
 			    deleteSelection();
-				break;
+				return true;
 		}
 
 		if(fragment != null) {
 			fragment.show(getFragmentManager(), "dialog");
+			actionMode.finish();
 			return true;
 		}
 
@@ -216,6 +218,15 @@ public class DeciderListFragment
 				ItemController.delete(mActivity, uri);
 			} catch (RemoteException e) {}
 		}
+	}
+
+	private DialogFragment getEditSelectionFragment() {
+		DialogFragment fragment = new ItemFragment(mActivity);
+		Item item = mAdapter.getSelectedItems().get(0);
+		Bundle bundle = new Bundle(1);
+		bundle.putParcelable(Constants.ITEM_PARAMETER, item);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 
     @Override

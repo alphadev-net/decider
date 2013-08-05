@@ -5,4 +5,5 @@ package net.alphaDev.Decider.Util;
  */
 public class Constants {
     public static final String LIST_PARAMETER = "list";
+	public static final String ITEM_PARAMETER = "item";
 }

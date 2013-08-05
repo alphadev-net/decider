@@ -34,13 +34,7 @@ public class ItemController {
 		values.put(Item.Columns.LABEL, item.getLabel().toString());
 		values.put(Item.Columns.LIST, item.getList());
 
-		if(item.getId() == -1) {
-			client.insert(baseUri, values);
-		} else {
-			Uri itemId = UriBuilder.getItemUri(item.getId());
-			client.update(itemId, values, null, null);
-		}
-
+		client.insert(baseUri, values);
 		client.release();
 	}
 
@@ -53,5 +47,19 @@ public class ItemController {
 		ContentProviderClient client = getClient(context, UriBuilder.getItemUri());
 		client.delete(uri, null, null);
 		client.release();
+	}
+
+	public static void update(Context context, Item item) throws RemoteException {
+		final Uri baseUri = UriBuilder.getItemUri();
+		ContentProviderClient client = getClient(context, baseUri);
+
+		final ContentValues values = new ContentValues();
+		values.put(Item.Columns.LABEL, item.getLabel().toString());
+		values.put(Item.Columns.LIST, item.getList());
+
+    	Uri itemId = UriBuilder.getItemUri(item.getId());
+    	client.update(itemId, values, null, null);
+
+    	client.release();
 	}
 }

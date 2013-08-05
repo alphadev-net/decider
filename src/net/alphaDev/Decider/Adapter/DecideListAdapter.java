@@ -50,6 +50,14 @@ public class DecideListAdapter
         }
     }
 
+	public void updateEntry(long id, CharSequence newItem) {
+		for(Item item: mEntries) {
+			if(item.getId() == id) {
+				item.setLabel(newItem);
+			}
+		}
+	}
+
     public void addEntry(CharSequence label) {
         final Item item = new Item(0, label);
         addEntry(item);
