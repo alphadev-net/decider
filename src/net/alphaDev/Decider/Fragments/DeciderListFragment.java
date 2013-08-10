@@ -149,8 +149,8 @@ public class DeciderListFragment
         }
 
         // Start the CAB using the ActionMode.Callback defined above
-        mActionMode = mActivity.startActionMode(this);
         mAdapter.setSelected(id, true);
+        mActionMode = mActivity.startActionMode(this);
         return true;
     }
 
