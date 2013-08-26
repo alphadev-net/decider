@@ -144,8 +144,10 @@ public class DecideListAdapter
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.text1);
-        textView.setText(mEntries.get(i).getLabel());
-
+		Item item = mEntries.get(i);
+		if(item == null) {
+			textView.setText(item.getLabel());
+		}
         return convertView;
     }
 
