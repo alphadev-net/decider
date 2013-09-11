@@ -4,20 +4,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
-import net.alphaDev.Decider.Adapter.DecideListAdapter;
 import net.alphaDev.Decider.Adapter.LoadListAdapter;
-import net.alphaDev.Decider.DeciderActivity;
-import net.alphaDev.Decider.Model.List;
+import net.alphaDev.Decider.Controllers.ListController;
+import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.R;
-import net.alphaDev.Decider.Util.UriBuilder;
+import net.alphaDev.Decider.Util.Constants;
 
 /**
  *
@@ -28,11 +27,11 @@ public class LoadListFragment
         implements LoaderManager.LoaderCallbacks<Cursor>,
         ListView.OnItemClickListener {
 
-	private DeciderActivity mContext;
+	private DeciderListActivity mContext;
 	private LoadListAdapter mAdapter;
 	private LoaderManager loaderManager;
 
-    public LoadListFragment(DeciderActivity ctx) {
+    public LoadListFragment(DeciderListActivity ctx) {
 		mContext = ctx;
 		loaderManager = ctx.getLoaderManager();
 	}
@@ -52,18 +51,15 @@ public class LoadListFragment
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+	public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
 		Bundle bundle = new Bundle(1);
-		bundle.putLong("list", p4);
-		loaderManager.initLoader(p3, bundle, mContext);
+		bundle.putLong(Constants.LIST_PARAMETER, id);
+		loaderManager.initLoader(pos, bundle, mContext.getListFragment());
 		dismissAllowingStateLoss();
 	}
-	
+
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		CursorLoader loader = new CursorLoader(mContext);
-		loader.setUri(UriBuilder.getListUri());
-		loader.setProjection(List.DEFAULT_PROJECTION);
-		return loader;
+		return ListController.getLists(mContext);
 	}
 
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {

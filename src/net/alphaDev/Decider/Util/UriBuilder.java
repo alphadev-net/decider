@@ -33,4 +33,8 @@ public class UriBuilder {
 	public static Uri getItemUri(long id) {
 		return ContentUris.withAppendedId(getItemUri(), id);
 	}
+
+    public static long getId(Uri uri) {
+        return Long.valueOf(uri.getLastPathSegment());
+    }
 }

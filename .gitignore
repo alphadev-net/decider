@@ -2,14 +2,8 @@
 /bin/
 /gen/
 /nbandroid/
-/lib/wheel/gen/
-/lib/wheel/bin/
-/lib/actionbarsherlock/bin/
-/lib/actionbaraherlock/gen/
 *.bak
 .DS_Store
-/lib/wheel/nbandroid/
-/lib/wheel/local.properties
 local.properties
 /private
 /bin/
@@ -17,3 +11,5 @@ lib/actionbarsherlock/gen/com/actionbarsherlock/R.java
 lib/actionbarsherlock/gen/com/actionbarsherlock/BuildConfig.java
 lib/actionbarsherlock/gen/R.java.d
 /.idea/
+/proguard_logs/
+*.apk

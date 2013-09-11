@@ -16,10 +16,15 @@ import android.widget.Toast;
 
 import net.alphaDev.Decider.Actions.DialogCancelledAction;
 import net.alphaDev.Decider.Adapter.DecideListAdapter;
-import net.alphaDev.Decider.DeciderActivity;
+import net.alphaDev.Decider.DeciderListActivity;
 import net.alphaDev.Decider.Model.List;
 import net.alphaDev.Decider.R;
+import net.alphaDev.Decider.Util.Constants;
 import net.alphaDev.Decider.Util.UriBuilder;
+import net.alphaDev.Decider.Controllers.ItemController;
+import net.alphaDev.Decider.Model.Item;
+import android.os.RemoteException;
+import net.alphaDev.Decider.Controllers.ListController;
 
 /**
  *
@@ -27,90 +32,65 @@ import net.alphaDev.Decider.Util.UriBuilder;
  */
 public class SaveListFragment
         extends DialogFragment
-        implements DialogInterface.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements DialogInterface.OnClickListener {
 
     private DecideListAdapter mAdapter;
     private Context mContext;
     private TextView mText;
-    private long mId = -1;
-    private CharSequence mListLabel;
+    private List mList;
 
-    public SaveListFragment(DeciderActivity mContext) {
+    public SaveListFragment(DeciderListActivity mContext) {
         this.mContext = mContext;
-        this.mAdapter = (DecideListAdapter) mContext.getListAdapter();
+        this.mAdapter = (DecideListAdapter) mContext.getListFragment().getListAdapter();
+        this.mList = mAdapter.getList();
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        try {
-            final LayoutInflater inflater = LayoutInflater.from(mContext);
-            mText = (TextView) inflater.inflate(R.layout.save_dialog, null, false);
-            return new AlertDialog.Builder(mContext)
-                    .setTitle(R.string.list_title_dialog_message)
-                    .setView(mText)
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel, new DialogCancelledAction())
-                    .setPositiveButton(R.string.save_btn, this)
-                    .create();
-        } finally {
-            long parent = findParentList(mAdapter);
-            if(parent != -1) {
-                final Bundle bundle = new Bundle(1);
-                bundle.putLong("list", parent);
-                getLoaderManager().initLoader(-1, bundle, this);
-            }
-        }
+        final LayoutInflater inflater = LayoutInflater.from(mContext);
+        mText = (TextView) inflater.inflate(R.layout.save_dialog, null, false);
+
+		if(mList != null) {
+			mText.setText(mList.getLabel());
+		}
+
+        return new AlertDialog.Builder(mContext)
+                .setTitle(R.string.list_title_dialog_message)
+                .setView(mText)
+                .setCancelable(true)
+				.setNegativeButton(R.string.cancel, new DialogCancelledAction())
+                .setPositiveButton(R.string.save_btn, this)
+                .create();
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onClick(DialogInterface dialogInterface, int btnId) {
         CharSequence label = mText.getText();
         if(label.length() == 0) {
             Toast.makeText(mContext, R.string.empty_save, Toast.LENGTH_SHORT).show();
         } else {
-            if(mListLabel != label || mId == -1) {
-                // TODO: implement fresh list saving
-            } else {
-                // TODO: implement list updating
-            }
+            if(mList == null) {
+				mList = new List(mText.getText());
+			}
+			
+			try {
+				ListController.save(mContext, mList);
+			} catch (RemoteException e) {}
+
+			for(int i = 0; i < mAdapter.getCount(); i++) {
+				Item item = (Item) mAdapter.getItem(i);
+				item.setList(mList.getId());
+				if(!item.isSaved() || !mList.getLabel().equals(mText.getText())) {
+					try {
+						ItemController.save(mContext, item);
+					} catch (RemoteException e) {}
+				} else {
+					try {
+						ItemController.update(mContext, item);
+					} catch (RemoteException e) {}
+				}
+			}
             dialogInterface.dismiss();
         }
-    }
-
-    private static long findParentList(DecideListAdapter adapter) {
-        long result = -1;
-        for(int i=0; i<adapter.getCount(); i++) {
-            DecideListAdapter.InnerItem item = (DecideListAdapter.InnerItem) adapter.getItem(i);
-            if(item.id != result) {
-                result = item.list;
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        long parentList = bundle.getLong("list");
-        final CursorLoader loader = new CursorLoader(mContext);
-        loader.setUri(UriBuilder.getListUri(parentList));
-        loader.setProjection(List.DEFAULT_PROJECTION);
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
-            int idIndex = cursor.getColumnIndex(List.Columns._ID);
-            int labelIndex = cursor.getColumnIndex(List.Columns.LABEL);
-            mId = cursor.getLong(idIndex);
-            mListLabel = cursor.getString(labelIndex);
-            mText.setText(mListLabel);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 }
